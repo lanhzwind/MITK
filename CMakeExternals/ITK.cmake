@@ -71,12 +71,14 @@ if(NOT DEFINED ITK_DIR)
 
   ExternalProject_Add(${proj}
      LIST_SEPARATOR ${sep}
-     URL ${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/InsightToolkit-4.7.1-20c0592.tar.gz
-     URL_MD5 f778a5f0e297c06dc629c33ec45733dc
+     #URL ${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/InsightToolkit-4.7.1-20c0592.tar.gz
+     #URL_MD5 f778a5f0e297c06dc629c33ec45733dc
      # work with external GDCM
-     PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/ITK-4.7.1.patch
-                   ${vcl_constexpr_patch}
-                   ${vcl_gcc5_patch}
+     #PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/ITK-4.7.1.patch
+     #              ${vcl_constexpr_patch}
+     #              ${vcl_gcc5_patch}
+     GIT_REPOSITORY https://github.com/SimVascular/ITK.git
+     GIT_TAG origin/simvascular-patch-4.8.2
      CMAKE_GENERATOR ${gen}
      CMAKE_ARGS
        ${ep_common_args}

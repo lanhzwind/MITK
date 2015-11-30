@@ -13,22 +13,51 @@ if(MITK_USE_CTK)
   set(proj_DEPENDENCIES )
   set(CTK_DEPENDS ${proj})
 
+  list(APPEND proj_DEPENDENCIES VTK)
+  list(APPEND proj_DEPENDENCIES ITK)
+
   if(NOT DEFINED CTK_DIR)
 
-    set(revision_tag 4d12a3b8)
+    #set(revision_tag 73aad338)
     #IF(${proj}_REVISION_TAG)
     #  SET(revision_tag ${${proj}_REVISION_TAG})
     #ENDIF()
 
     set(ctk_optional_cache_args )
+
+    list(APPEND ctk_optional_cache_args
+         -DVTK_DIR:PATH=${VTK_DIR}
+         -DITK_DIR:PATH=${ITK_DIR}
+    )
+         
+    list(APPEND ctk_optional_cache_args
+         -DCTK_BUILD_ALL:BOOL=ON
+         -DCTK_BUILD_ALL_APPS:BOOL=ON
+         -DCTK_BUILD_ALL_LIBRARIES:BOOL=ON
+         -DCTK_BUILD_ALL_PLUGINS:BOOL=ON
+         -DCTK_BUILD_EXAMPLES:BOOL=ON
+         -DCTK_ENABLE_DICOM:BOOL=ON
+         -DCTK_ENABLE_DICOMApplicationHosting:BOOL=ON
+         -DCTK_ENABLE_PluginFramework:BOOL=ON
+         -DCTK_ENABLE_Widgets:BOOL=ON
+    )
+
+    list(APPEND ctk_optional_cache_args
+         -DCTK_BUILD_SHARED_LIBS:BOOL=ON
+         -DBUILD_TESTING:BOOL=OFF
+    )
+
     if(MITK_USE_Python)
       if(NOT MITK_USE_SYSTEM_PYTHON)
         list(APPEND proj_DEPENDENCIES Python)
       endif()
       list(APPEND ctk_optional_cache_args
-           -DCTK_LIB_Scripting/Python/Widgets:BOOL=ON
            -DCTK_ENABLE_Python_Wrapping:BOOL=ON
-           -DCTK_APP_ctkSimplePythonShell:BOOL=ON
+           -DCTK_LIB_Scripting/Python/Core_PYTHONQT_USE_VTK:BOOL=ON
+           -DCTK_LIB_Scripting/Python/Core_PYTHONQT_WRAP_QTALL:BOOL=ON
+           -DCTK_LIB_Visualization/VTK/Widgets_USE_TRANSFER_FUNCTION_CHARTS:BOOL=ON
+           #-DCTK_LIB_Scripting/Python/Widgets:BOOL=ON
+           #-DCTK_APP_ctkSimplePythonShell:BOOL=ON
            -DPYTHON_EXECUTABLE:FILEPATH=${PYTHON_EXECUTABLE}
            -DPYTHON_INCLUDE_DIR:PATH=${PYTHON_INCLUDE_DIR}
            -DPYTHON_INCLUDE_DIR2:PATH=${PYTHON_INCLUDE_DIR2}
@@ -74,10 +103,11 @@ if(MITK_USE_CTK)
 
     ExternalProject_Add(${proj}
       LIST_SEPARATOR ${sep}
-      URL ${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/CTK_${revision_tag}.tar.gz
-      URL_MD5 135910e407bd1f5de29d2a0a9efe5f80
-      #GIT_REPOSITORY https://github.com/commontk/CTK.git
-      #GIT_TAG origin/master
+      #URL ${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/CTK_${revision_tag}.tar.gz
+      #URL_MD5 135910e407bd1f5de29d2a0a9efe5f80
+      GIT_REPOSITORY https://github.com/SimVascular/CTK.git
+      GIT_TAG origin/simvascular-patch-1
+      #PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/CTK-73aad338.patch
       UPDATE_COMMAND ""
       INSTALL_COMMAND ""
       CMAKE_GENERATOR ${gen}
@@ -102,7 +132,7 @@ if(MITK_USE_CTK)
         -DDCMTK_URL:STRING=${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/CTK_DCMTK_085525e6.tar.gz
         -DqRestAPI_URL:STRING=${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/qRestAPI_5f3a03b1.tar.gz
         # See bug 19073
-        -DPythonQt_URL:STRING=${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/PythonQt_36ab9c7c.tar.gz
+        #-DPythonQt_URL:STRING=${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/PythonQt_36ab9c7c.tar.gz
       CMAKE_CACHE_ARGS
         ${ep_common_cache_args}
       CMAKE_CACHE_DEFAULT_ARGS
