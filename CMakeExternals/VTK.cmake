@@ -91,14 +91,16 @@ if(NOT DEFINED VTK_DIR)
     )
   endif()
 
-  set(VTK_URL ${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/VTK-6.2.0.tar.gz)
-  set(VTK_URL_MD5 4790f8b3acdbc376997fbdc9d203f0b7)
+  #set(VTK_URL ${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/VTK-6.2.0.tar.gz)
+  #set(VTK_URL_MD5 4790f8b3acdbc376997fbdc9d203f0b7)
 
   ExternalProject_Add(${proj}
     LIST_SEPARATOR ${sep}
-    URL ${VTK_URL}
-    URL_MD5 ${VTK_URL_MD5}
-    PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/VTK-6.2.0.patch
+    #URL ${VTK_URL}
+    #URL_MD5 ${VTK_URL_MD5}
+    #PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/VTK-6.2.0.patch
+    GIT_REPOSITORY https://github.com/SimVascular/VTK.git
+    GIT_TAG origin/simvascular-patch-6.2b
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
         ${ep_common_args}
@@ -109,6 +111,8 @@ if(NOT DEFINED VTK_DIR)
         -DVTK_LEGACY_REMOVE:BOOL=ON
         -DModule_vtkTestingRendering:BOOL=ON
         -DVTK_MAKE_INSTANTIATORS:BOOL=ON
+        -DVTK_Group_Tk=ON
+        -DVTK_WRAP_TCL=ON
         ${additional_cmake_args}
     CMAKE_CACHE_ARGS
       ${ep_common_cache_args}
