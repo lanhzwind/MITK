@@ -204,7 +204,7 @@ env_option(MITK_USE_QT "Use Qt library" ON)
 
 if(MITK_USE_QT)
   set(MITK_QT5_MINIMUM_VERSION 5.0.0)
-  set(MITK_QT5_COMPONENTS Concurrent OpenGL PrintSupport Script Sql Svg Widgets WebKitWidgets Xml XmlPatterns UiTools Help)
+  set(MITK_QT5_COMPONENTS Concurrent OpenGL PrintSupport Script Sql Svg Widgets WebKitWidgets Xml XmlPatterns UiTools Help LinguistTools)
   if(APPLE)
     set(MITK_QT5_COMPONENTS ${MITK_QT5_COMPONENTS} DBus)
   endif()
@@ -262,8 +262,8 @@ mitkFunctionAddExternalProject(NAME OpenCV    OFF)
 mitkFunctionAddExternalProject(NAME Vigra     OFF          DEPENDS HDF5)
 
 # These are "hard" dependencies and always set to ON
-mitkFunctionAddExternalProject(NAME ITK       ON           NO_CACHE)
 mitkFunctionAddExternalProject(NAME VTK       ON           NO_CACHE)
+mitkFunctionAddExternalProject(NAME ITK       ON           NO_CACHE)
 mitkFunctionAddExternalProject(NAME Boost     ON           NO_CACHE)
 
 mitkFunctionAddExternalProject(NAME SimpleITK OFF          DEPENDS ITK GDCM SWIG)

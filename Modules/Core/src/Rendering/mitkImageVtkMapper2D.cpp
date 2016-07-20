@@ -52,6 +52,8 @@ See LICENSE.txt or http://www.mitk.org for details.
 #include <vtkCellArray.h>
 #include <vtkCamera.h>
 #include <vtkColorTransferFunction.h>
+#include <vtkImageGradientMagnitude.h>
+#include <vtkImageHistogramStatistics.h>
 
 //ITK
 #include <itkRGBAPixel.h>
@@ -288,6 +290,60 @@ void mitk::ImageVtkMapper2D::GenerateDataForRenderer( mitk::BaseRenderer *render
     localStorage->m_ReslicedImage = localStorage->m_Reslicer->GetVtkOutput();
   }
 
+  bool showGradient= false;
+  datanode->GetBoolProperty("show gradient", showGradient, renderer);
+  if (showGradient)
+  {
+	  vtkSmartPointer<vtkImageGradientMagnitude> gradientFilter = vtkSmartPointer<vtkImageGradientMagnitude>::New();
+      gradientFilter->HandleBoundariesOn();
+      gradientFilter->SetInputData(localStorage->m_ReslicedImage);
+      gradientFilter->Update();
+
+      // "background" pixels produce very large gradients at border
+      int extent[6];
+      gradientFilter->GetOutput()->GetExtent(extent);
+
+      for (int y = extent[2]; y <=extent[3] ; ++y)
+      {
+          for (int x = extent[0]; x <= extent[1]; ++x)
+          {
+              if (fabsf(localStorage->m_ReslicedImage->GetScalarComponentAsDouble(x, y, 0, 0) - (-32768.0)) < 1e-3)
+              {
+            	  gradientFilter->GetOutput()->SetScalarComponentFromDouble(x, y, 0, 0, 0);
+              }
+
+              int offsets[][2] = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+
+              for (size_t i = 0; i < sizeof(offsets) / sizeof(offsets[0]); ++i) {
+                  int xoff = x + offsets[i][0];
+                  int yoff = y + offsets[i][1];
+
+                  if (xoff < extent[0] || xoff > extent[1] || yoff < extent[2] || yoff > extent[3]) {
+                      continue;
+                  }
+
+                  if (fabsf(localStorage->m_ReslicedImage->GetScalarComponentAsDouble(xoff, yoff, 0, 0) - (-32768.0)) < 1e-3)
+                  {
+                	  gradientFilter->GetOutput()->SetScalarComponentFromDouble(x, y, 0, 0, 0);
+                      break;
+                  }
+              }
+          }
+      }
+
+      localStorage->m_ReslicedImage = gradientFilter->GetOutput();
+
+      vtkSmartPointer<vtkImageHistogramStatistics> stats = vtkSmartPointer<vtkImageHistogramStatistics>::New();
+      stats->SetInputData(localStorage->m_ReslicedImage);
+      stats->GenerateHistogramImageOff();
+      stats->Update();
+
+      mitk::LevelWindow levelWindow;
+      levelWindow.SetRangeMinMax(stats->GetAutoRange()[0], stats->GetAutoRange()[1]);
+      levelWindow.SetWindowBounds(stats->GetAutoRange()[0], stats->GetAutoRange()[1]);
+      datanode->SetLevelWindow(levelWindow, renderer, "gradientlevelwindow");
+  }
+
   // Bounds information for reslicing (only reuqired if reference geometry
   // is present)
   //this used for generating a vtkPLaneSource with the right size
@@ -439,7 +495,10 @@ void mitk::ImageVtkMapper2D::ApplyLevelWindow(mitk::BaseRenderer *renderer)
   LocalStorage *localStorage = this->GetLocalStorage( renderer );
 
   LevelWindow levelWindow;
-  this->GetDataNode()->GetLevelWindow( levelWindow, renderer, "levelwindow" );
+//  this->GetDataNode()->GetLevelWindow( levelWindow, renderer, "levelwindow" );
+  bool showGradient = false;
+  this->GetDataNode()->GetBoolProperty("show gradient", showGradient, renderer);
+  this->GetDataNode()->GetLevelWindow( levelWindow, renderer, showGradient? "gradientlevelwindow" : "levelwindow" );
   localStorage->m_LevelWindowFilter->GetLookupTable()->SetRange( levelWindow.GetLowerWindowBound(), levelWindow.GetUpperWindowBound() );
 
   mitk::LevelWindow opacLevelWindow;
@@ -591,7 +650,7 @@ void mitk::ImageVtkMapper2D::ApplyLookuptable( mitk::BaseRenderer* renderer )
   vtkLookupTable* usedLookupTable = localStorage->m_ColorLookupTable;
 
   // If lookup table or transferfunction use is requested...
-  mitk::LookupTableProperty::Pointer lookupTableProp = dynamic_cast<mitk::LookupTableProperty*>(this->GetDataNode()->GetProperty("LookupTable"));
+  mitk::LookupTableProperty::Pointer lookupTableProp = dynamic_cast<mitk::LookupTableProperty*>(this->GetDataNode()->GetProperty("LookupTable", renderer));
 
   if( lookupTableProp.IsNotNull() ) // is a lookuptable set?
   {
