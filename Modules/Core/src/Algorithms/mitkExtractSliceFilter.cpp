@@ -36,6 +36,8 @@ mitk::ExtractSliceFilter::ExtractSliceFilter(vtkImageReslice* reslicer ){
   m_InterpolationMode = ExtractSliceFilter::RESLICE_NEAREST;
   m_ResliceTransform = nullptr;
   m_InPlaneResampleExtentByGeometry = false;
+  m_InPlaneResampleSizeByGeometry = false;
+  m_InPlaneResampleExtentByMinimumSpacing = false;
   m_OutPutSpacing = new mitk::ScalarType[2];
   m_OutputDimension = 2;
   m_ZSpacing = 1.0;
@@ -186,8 +188,15 @@ void mitk::ExtractSliceFilter::GenerateData(){
         // Resampling grid corresponds to the current world geometry. This
         // means that the spacing of the output 2D image depends on the
         // currently selected world geometry, and *not* on the image itself.
-        extent[0] = m_WorldGeometry->GetExtent( 0 );
-        extent[1] = m_WorldGeometry->GetExtent( 1 );
+        extent[0] = planeGeometry->GetExtent( 0 );
+        extent[1] = planeGeometry->GetExtent( 1 );
+      }
+      else if(m_InPlaneResampleExtentByMinimumSpacing)
+      {
+    	    const mitk::Vector3D &imageSpacing = inputTimeGeometry->GetGeometryForTimeStep(0)->GetSpacing();
+            double minSpacing=std::min(imageSpacing[0],std::min(imageSpacing[1],imageSpacing[2]));
+            extent[0]=planeGeometry->GetExtentInMM( 0 )/minSpacing;
+            extent[1]=planeGeometry->GetExtentInMM( 1 )/minSpacing;
       }
       else
       {
@@ -221,8 +230,9 @@ void mitk::ExtractSliceFilter::GenerateData(){
       * and the worldGeometry surrouding the image is no imageGeometry. So the worldGeometry
       * has its origin at the corner of the voxel and needs to be transformed.
       */
-      origin += right * ( m_OutPutSpacing[0] * 0.5 );
-      origin += bottom * ( m_OutPutSpacing[1] * 0.5 );
+      //The origin is Point3D, which could be anywhere, so I (HL) comment the two lines
+      //origin += right * ( m_OutPutSpacing[0] * 0.5 );
+      //origin += bottom * ( m_OutPutSpacing[1] * 0.5 );
 
       //set the tranform for reslicing.
       // Use inverse transform of the input geometry for reslicing the 3D image.
@@ -305,12 +315,14 @@ void mitk::ExtractSliceFilter::GenerateData(){
   int xMin, xMax, yMin, yMax;
 
   xMin = yMin = 0;
-  xMax = static_cast< int >( extent[0]);
-  yMax = static_cast< int >( extent[1]);
+  xMax = static_cast< int >( std::ceil(extent[0]));
+  yMax = static_cast< int >( std::ceil(extent[1]));
 
-  double sliceBounds[6];
-  if (m_WorldGeometry->GetReferenceGeometry())
+  if(!m_InPlaneResampleSizeByGeometry)
   {
+   double sliceBounds[6];
+   if (m_WorldGeometry->GetReferenceGeometry())
+   {
     for (auto & sliceBound : sliceBounds)
     {
       sliceBound = 0.0;
@@ -324,8 +336,8 @@ void mitk::ExtractSliceFilter::GenerateData(){
       yMin = static_cast< int >( sliceBounds[2] / m_OutPutSpacing[1] + 0.5 );
       yMax = static_cast< int >( sliceBounds[3] / m_OutPutSpacing[1] + 0.5 );
     } // ELSE we use the default values
+   }
   }
-
   // Set the output extents! First included pixel index and last included pixel index
   // xMax and yMax are one after the last pixel. so they have to be decremented by 1.
   // In case we have a 2D image, xMax or yMax might be 0. in this case, do not decrement, but take 0.

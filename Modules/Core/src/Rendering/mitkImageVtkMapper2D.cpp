@@ -168,6 +168,13 @@ void mitk::ImageVtkMapper2D::GenerateDataForRenderer( mitk::BaseRenderer *render
   datanode->GetBoolProperty("in plane resample extent by geometry", inPlaneResampleExtentByGeometry, renderer);
   localStorage->m_Reslicer->SetInPlaneResampleExtentByGeometry(inPlaneResampleExtentByGeometry);
 
+  bool inPlaneResampleSizeByGeometry = false;
+  datanode->GetBoolProperty("in plane resample size by geometry", inPlaneResampleSizeByGeometry, renderer);
+  localStorage->m_Reslicer->SetInPlaneResampleSizeByGeometry(inPlaneResampleSizeByGeometry);
+
+  bool inPlaneResampleExtentByMinimumSpacing = false;
+  datanode->GetBoolProperty("in plane resample extent by minimum spacing", inPlaneResampleExtentByMinimumSpacing, renderer);
+  localStorage->m_Reslicer->SetInPlaneResampleExtentByMinimumSpacing(inPlaneResampleExtentByMinimumSpacing);
 
   // Initialize the interpolation mode for resampling; switch to nearest
   // neighbor if the input image is too small.
@@ -352,7 +359,20 @@ void mitk::ImageVtkMapper2D::GenerateDataForRenderer( mitk::BaseRenderer *render
   {
     sliceBound = 0.0;
   }
-  localStorage->m_Reslicer->GetClippedPlaneBounds(sliceBounds);
+
+  if(inPlaneResampleSizeByGeometry)
+  {
+      double widthInMM = planeGeometry->GetExtentInMM( 0 );
+      double heightInMM = planeGeometry->GetExtentInMM( 1 );
+      sliceBounds[0] = 0.0;
+      sliceBounds[1] = widthInMM;
+      sliceBounds[2] = 0.0;
+      sliceBounds[3] = heightInMM;
+  }
+  else
+  {
+    localStorage->m_Reslicer->GetClippedPlaneBounds(sliceBounds);
+  }
 
   //get the spacing of the slice
   localStorage->m_mmPerPixel = localStorage->m_Reslicer->GetOutputSpacing();
@@ -364,16 +384,29 @@ void mitk::ImageVtkMapper2D::GenerateDataForRenderer( mitk::BaseRenderer *render
     {
       textureClippingBound = 0.0;
     }
-    // Calculate the actual bounds of the transformed plane clipped by the
-    // dataset bounding box; this is required for drawing the texture at the
-    // correct position during 3D mapping.
-    mitk::PlaneClipping::CalculateClippedPlaneBounds( input->GetGeometry(), planeGeometry, textureClippingBounds );
 
-    textureClippingBounds[0] = static_cast< int >( textureClippingBounds[0] / localStorage->m_mmPerPixel[0] + 0.5 );
-    textureClippingBounds[1] = static_cast< int >( textureClippingBounds[1] / localStorage->m_mmPerPixel[0] + 0.5 );
-    textureClippingBounds[2] = static_cast< int >( textureClippingBounds[2] / localStorage->m_mmPerPixel[1] + 0.5 );
-    textureClippingBounds[3] = static_cast< int >( textureClippingBounds[3] / localStorage->m_mmPerPixel[1] + 0.5 );
+    if(inPlaneResampleSizeByGeometry)
+    {
+        double widthInMM = planeGeometry->GetExtentInMM( 0 );
+        double heightInMM = planeGeometry->GetExtentInMM( 1 );
 
+        textureClippingBounds[0] = 0.0;
+        textureClippingBounds[1] = widthInMM / localStorage->m_mmPerPixel[0];
+        textureClippingBounds[2] = 0.0;
+        textureClippingBounds[3] = heightInMM / localStorage->m_mmPerPixel[1];
+    }
+    else
+    {
+        // Calculate the actual bounds of the transformed plane clipped by the
+        // dataset bounding box; this is required for drawing the texture at the
+        // correct position during 3D mapping.
+        mitk::PlaneClipping::CalculateClippedPlaneBounds( input->GetGeometry(), planeGeometry, textureClippingBounds );
+
+        textureClippingBounds[0] = static_cast< int >( textureClippingBounds[0] / localStorage->m_mmPerPixel[0] + 0.5 );
+        textureClippingBounds[1] = static_cast< int >( textureClippingBounds[1] / localStorage->m_mmPerPixel[0] + 0.5 );
+        textureClippingBounds[2] = static_cast< int >( textureClippingBounds[2] / localStorage->m_mmPerPixel[1] + 0.5 );
+        textureClippingBounds[3] = static_cast< int >( textureClippingBounds[3] / localStorage->m_mmPerPixel[1] + 0.5 );
+    }
     //clipping bounds for cutting the image
     localStorage->m_LevelWindowFilter->SetClippingBounds(textureClippingBounds);
   }
@@ -745,6 +778,8 @@ void mitk::ImageVtkMapper2D::SetDefaultProperties(mitk::DataNode* node, mitk::Ba
   else node->AddProperty( "reslice interpolation", mitk::VtkResliceInterpolationProperty::New() );
   node->AddProperty( "texture interpolation", mitk::BoolProperty::New( false ) );
   node->AddProperty( "in plane resample extent by geometry", mitk::BoolProperty::New( false ) );
+  node->AddProperty( "in plane resample size by geometry", mitk::BoolProperty::New( false ) );
+  node->AddProperty( "in plane resample extent by minimum spacing", mitk::BoolProperty::New( false ) );
   node->AddProperty( "bounding box", mitk::BoolProperty::New( false ) );
 
   mitk::RenderingModeProperty::Pointer renderingModeProperty = mitk::RenderingModeProperty::New();
