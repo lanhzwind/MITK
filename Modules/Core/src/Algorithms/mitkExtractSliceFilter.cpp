@@ -230,9 +230,8 @@ void mitk::ExtractSliceFilter::GenerateData(){
       * and the worldGeometry surrouding the image is no imageGeometry. So the worldGeometry
       * has its origin at the corner of the voxel and needs to be transformed.
       */
-      //The origin is Point3D, which could be anywhere, so I (HL) comment the two lines
-      //origin += right * ( m_OutPutSpacing[0] * 0.5 );
-      //origin += bottom * ( m_OutPutSpacing[1] * 0.5 );
+      origin += right * ( m_OutPutSpacing[0] * 0.5 );
+      origin += bottom * ( m_OutPutSpacing[1] * 0.5 );
 
       //set the tranform for reslicing.
       // Use inverse transform of the input geometry for reslicing the 3D image.
@@ -315,8 +314,8 @@ void mitk::ExtractSliceFilter::GenerateData(){
   int xMin, xMax, yMin, yMax;
 
   xMin = yMin = 0;
-  xMax = static_cast< int >( std::ceil(extent[0]));
-  yMax = static_cast< int >( std::ceil(extent[1]));
+  xMax = static_cast< int >( std::round(extent[0]));
+  yMax = static_cast< int >( std::round(extent[1]));
 
   if(!m_InPlaneResampleSizeByGeometry)
   {
