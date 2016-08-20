@@ -830,6 +830,11 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH}
   )
 
+if(MITK_USE_GDCM)
+  find_package(GDCM REQUIRED)
+  include(${GDCM_USE_FILE})
+endif()
+
 if(MITK_USE_DCMTK)
   # Due to the preferred CONFIG mode in find_package calls above,
   # the DCMTKConfig.cmake file is read, which does not provide useful
