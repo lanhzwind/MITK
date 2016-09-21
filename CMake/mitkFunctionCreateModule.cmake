@@ -368,16 +368,14 @@ function(mitk_create_module)
       endif()
     endif(MODULE_WARNINGS_AS_ERRORS)
 
+    set(_STATIC )
+
     if(MODULE_FORCE_STATIC)
       set(_STATIC STATIC)
-    else()
-      set(_STATIC )
     endif(MODULE_FORCE_STATIC)
 
     if(MODULE_FORCE_SHARED)
       set(_STATIC SHARED)
-    else()
-      set(_STATIC )
     endif(MODULE_FORCE_SHARED)
 
     if(NOT MODULE_HEADERS_ONLY)

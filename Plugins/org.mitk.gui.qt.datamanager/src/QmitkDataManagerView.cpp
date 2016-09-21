@@ -125,7 +125,7 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
   m_NodeTreeModel = new QmitkDataStorageTreeModel(this->GetDataStorage());
   m_NodeTreeModel->setParent( parent );
   m_NodeTreeModel->SetPlaceNewNodesOnTop(
-      prefs->GetBool("Place new nodes on top", true) );
+      prefs->GetBool("Place new nodes on top", false) );
   m_SurfaceDecimation = prefs->GetBool("Use surface decimation", false);
   // Prepare filters
   m_HelperObjectFilterPredicate = mitk::NodePredicateOr::New(
@@ -436,11 +436,13 @@ void QmitkDataManagerView::ContextMenuActionTriggered( bool )
   mitk::IContextMenuAction* contextMenuAction = confElem->CreateExecutableExtension<mitk::IContextMenuAction>("class");
 
   QString className = confElem->GetAttribute("class");
-  QString smoothed = confElem->GetAttribute("smoothed");
+  
+  contextMenuAction->SetDataStorage(this->GetDataStorage());
+  contextMenuAction->SetFunctionality(this);
 
   if(className == "QmitkCreatePolygonModelAction")
   {
-    contextMenuAction->SetDataStorage(this->GetDataStorage());
+    QString smoothed = confElem->GetAttribute("smoothed");
     if(smoothed == "false")
     {
       contextMenuAction->SetSmoothed(false);
@@ -451,20 +453,13 @@ void QmitkDataManagerView::ContextMenuActionTriggered( bool )
     }
     contextMenuAction->SetDecimated(m_SurfaceDecimation);
   }
-  else if(className == "QmitkStatisticsAction")
-  {
-    contextMenuAction->SetFunctionality(this);
-  }
-  else if(className == "QmitkCreateSimulationAction")
-  {
-    contextMenuAction->SetDataStorage(this->GetDataStorage());
-  }
+
   contextMenuAction->Run( this->GetCurrentSelection() ); // run the action
 }
 
 void QmitkDataManagerView::OnPreferencesChanged(const berry::IBerryPreferences* prefs)
 {
-  if( m_NodeTreeModel->GetPlaceNewNodesOnTopFlag() !=  prefs->GetBool("Place new nodes on top", true) )
+  if( m_NodeTreeModel->GetPlaceNewNodesOnTopFlag() !=  prefs->GetBool("Place new nodes on top", false) )
     m_NodeTreeModel->SetPlaceNewNodesOnTop( !m_NodeTreeModel->GetPlaceNewNodesOnTopFlag() );
 
   bool hideHelperObjects = !prefs->GetBool("Show helper objects", false);
