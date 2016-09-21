@@ -126,6 +126,7 @@ function(mitk_create_module)
 
   set(_macro_options
       FORCE_STATIC           # force building this module as a static library
+      FORCE_SHARED           # force building this module as a shared library
       HEADERS_ONLY           # this module is a headers-only library
       GCC_DEFAULT_VISIBILITY # do not use gcc visibility flags - all symbols will be exported
       NO_DEFAULT_INCLUDE_DIRS # do not add default include directories like "include" or "."
@@ -372,6 +373,12 @@ function(mitk_create_module)
     else()
       set(_STATIC )
     endif(MODULE_FORCE_STATIC)
+
+    if(MODULE_FORCE_SHARED)
+      set(_STATIC SHARED)
+    else()
+      set(_STATIC )
+    endif(MODULE_FORCE_SHARED)
 
     if(NOT MODULE_HEADERS_ONLY)
       if(NOT MODULE_NO_INIT OR RESOURCE_FILES)
