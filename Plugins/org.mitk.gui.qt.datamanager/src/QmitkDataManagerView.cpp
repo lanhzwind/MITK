@@ -378,6 +378,9 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
     , this, SLOT( SurfaceRepresentationMenuAboutToShow() ) );
   surfaceDataNodeDescriptor->AddAction(m_SurfaceRepresentation, false);
   m_DescriptorActionList.push_back(std::pair<QmitkNodeDescriptor*, QAction*>(surfaceDataNodeDescriptor, m_SurfaceRepresentation));
+  QmitkNodeDescriptor* svModelDataNodeDescriptor =
+    QmitkNodeDescriptorManager::GetInstance()->GetDescriptor("svModel");
+  svModelDataNodeDescriptor->AddAction(m_SurfaceRepresentation, false);
 
   QAction* showOnlySelectedNodes
     = new QAction(QIcon(":/org.mitk.gui.qt.datamanager/ShowSelectedNode_48.png")
