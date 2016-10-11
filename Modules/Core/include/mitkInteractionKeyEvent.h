@@ -45,11 +45,13 @@ namespace mitk
   public:
     mitkClassMacro(InteractionKeyEvent,InteractionEvent)
     mitkNewMacro3Param(Self, BaseRenderer*, const std::string& , ModifierKeys)
+    mitkNewMacro4Param(Self, BaseRenderer*, const std::string& , ModifierKeys, bool)
 
     bool IsSuperClassOf(const InteractionEvent::Pointer& baseClass) const override;
 
     ModifierKeys GetModifiers() const;
     std::string GetKey() const;
+    bool IsPressed() const;
 
   protected:
     InteractionKeyEvent(BaseRenderer*, const std::string& key, ModifierKeys modifiers);
@@ -60,6 +62,7 @@ namespace mitk
   private:
     std::string m_Key;
     ModifierKeys m_Modifiers;
+    bool m_Pressed;
   };
 } /* namespace mitk */
 

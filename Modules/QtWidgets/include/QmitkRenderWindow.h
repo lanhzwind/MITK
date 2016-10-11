@@ -113,6 +113,8 @@ protected:
   virtual void mouseReleaseEvent(QMouseEvent* event) override;
   // overloaded key press handler
   virtual void keyPressEvent(QKeyEvent* event) override;
+  // overloaded key release handler
+  virtual void keyReleaseEvent(QKeyEvent* event) override;
   // overloaded enter handler
   virtual void enterEvent(QEvent*) override;
   // overloaded leave handler

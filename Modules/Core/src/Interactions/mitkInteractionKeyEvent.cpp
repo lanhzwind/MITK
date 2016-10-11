@@ -16,8 +16,8 @@
 
 #include "mitkInteractionKeyEvent.h"
 
-mitk::InteractionKeyEvent::InteractionKeyEvent(mitk::BaseRenderer* baseRenderer, const std::string& key, ModifierKeys modifiers = ControlKey) :
-    InteractionEvent(baseRenderer), m_Key(key), m_Modifiers(modifiers)
+mitk::InteractionKeyEvent::InteractionKeyEvent(mitk::BaseRenderer* baseRenderer, const std::string& key, ModifierKeys modifiers = ControlKey, bool pressed = true) :
+    InteractionEvent(baseRenderer), m_Key(key), m_Modifiers(modifiers), m_Pressed(pressed)
 {
 }
 
@@ -31,6 +31,10 @@ std::string mitk::InteractionKeyEvent::GetKey() const
   return m_Key;
 }
 
+bool mitk::InteractionKeyEvent::IsPressed() const
+{
+  return m_Pressed;
+}
 
 mitk::InteractionKeyEvent::~InteractionKeyEvent()
 {
@@ -39,7 +43,7 @@ mitk::InteractionKeyEvent::~InteractionKeyEvent()
 bool mitk::InteractionKeyEvent::IsEqual(const mitk::InteractionEvent& interactionEvent) const
 {
   const mitk::InteractionKeyEvent& keyEvent = static_cast<const Self&>(interactionEvent);
-  return (this->GetModifiers() == keyEvent.GetModifiers() && this->GetKey() == keyEvent.GetKey() &&
+  return (this->GetModifiers() == keyEvent.GetModifiers() && this->GetKey() == keyEvent.GetKey() && this->IsPressed() == keyEvent.IsPressed() &&
           Superclass::IsEqual(interactionEvent));
 }
 

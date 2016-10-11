@@ -189,7 +189,22 @@ void QmitkRenderWindow::keyPressEvent(QKeyEvent *ke)
   mitk::InteractionEvent::ModifierKeys modifiers = GetModifiers(ke);
   std::string key = GetKeyLetter(ke);
 
-  mitk::InteractionKeyEvent::Pointer keyEvent = mitk::InteractionKeyEvent::New(m_Renderer, key, modifiers);
+  mitk::InteractionKeyEvent::Pointer keyEvent = mitk::InteractionKeyEvent::New(m_Renderer, key, modifiers, true);
+  if (!this->HandleEvent(keyEvent.GetPointer()))
+  {
+    QVTKWidget::keyPressEvent(ke);
+  }
+
+  if (m_ResendQtEvents)
+    ke->ignore();
+}
+
+void QmitkRenderWindow::keyReleaseEvent(QKeyEvent *ke)
+{
+  mitk::InteractionEvent::ModifierKeys modifiers = GetModifiers(ke);
+  std::string key = GetKeyLetter(ke);
+
+  mitk::InteractionKeyEvent::Pointer keyEvent = mitk::InteractionKeyEvent::New(m_Renderer, key, modifiers, false);
   if (!this->HandleEvent(keyEvent.GetPointer()))
   {
     QVTKWidget::keyPressEvent(ke);
