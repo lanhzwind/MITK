@@ -911,11 +911,37 @@ void QmitkDataManagerView::ShowInfoDialogForSelectedNodes( bool )
   _QmitkInfoDialog.exec();
 }
 
-void QmitkDataManagerView::NodeChanged(const mitk::DataNode* /*node*/)
+void QmitkDataManagerView::NodeChanged(const mitk::DataNode* node)
 {
   // m_FilterModel->invalidate();
   // fix as proposed by R. Khlebnikov in the mitk-users mail from 02.09.2014
   QMetaObject::invokeMethod( m_FilterModel, "invalidate", Qt::QueuedConnection );
+
+    mitk::NodePredicateOr::Pointer predicateTypes = mitk::NodePredicateOr::New();
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svImageFolder"));
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svPathFolder"));
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svSegmentationFolder"));
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svModelFolder"));
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svMeshFolder"));
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svSimulationFolder"));
+
+    if(predicateTypes->CheckNode(node)){
+        bool previousVisible=false;
+        node->GetBoolProperty("previous visibility", previousVisible);
+        bool currentVisible=false;
+        node->GetBoolProperty("visible", currentVisible);
+        if(currentVisible!=previousVisible){
+            mitk::DataStorage::SetOfObjects::ConstPointer rs = this->GetDataStorage()->GetDerivations(node);
+            for(int i=0;i<rs->size();i++){
+                rs->GetElement(i)->SetVisibility(currentVisible);
+            }
+            
+            mitk::DataNode* nodex=const_cast<mitk::DataNode*>(node);
+            nodex->SetBoolProperty("previous visibility",currentVisible);
+        }
+
+    }
+
 }
 
 QItemSelectionModel *QmitkDataManagerView::GetDataNodeSelectionModel() const
