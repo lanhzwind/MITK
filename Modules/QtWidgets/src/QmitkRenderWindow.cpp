@@ -37,6 +37,10 @@
 #include "QmitkRenderWindowMenu.h"
 #include "QmitkMimeTypes.h"
 
+#ifdef __APPLE__
+#include "QmitkDisableGLHiDPI.h"
+#endif
+
 QmitkRenderWindow::QmitkRenderWindow(QWidget *parent,
   QString name,
   mitk::VtkPropRenderer* /*renderer*/,
@@ -71,6 +75,11 @@ QmitkRenderWindow::QmitkRenderWindow(QWidget *parent,
 
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true);
+
+#ifdef __APPLE__
+  disableGLHiDPI(this->winId());
+#endif
+
 }
 
 QmitkRenderWindow::~QmitkRenderWindow()
