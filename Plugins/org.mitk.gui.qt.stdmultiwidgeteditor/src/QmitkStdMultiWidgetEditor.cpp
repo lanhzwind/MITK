@@ -424,6 +424,16 @@ void QmitkStdMultiWidgetEditor::OnPreferencesChanged(const berry::IBerryPreferen
   bool newMode = prefs->GetBool("PACS like mouse interaction", false);
   d->m_MouseModeToolbar->setVisible( newMode );
   d->m_StdMultiWidget->GetMouseModeSwitcher()->SetInteractionScheme( newMode ? mitk::MouseModeSwitcher::PACS : mitk::MouseModeSwitcher::MITK );
+  
+  bool showLogo = prefs->GetBool("Show Department Logo", false);
+  if(showLogo)
+  {
+    d->m_StdMultiWidget->EnableDepartmentLogo();
+  }
+  else
+  {
+    d->m_StdMultiWidget->DisableDepartmentLogo();
+  }
 }
 
 mitk::Color QmitkStdMultiWidgetEditor::HexColorToMitkColor(const QString& widgetColorInHex)

@@ -109,6 +109,7 @@ bool QmitkStdMultiWidgetEditorPreferencePage::PerformOk()
   m_Preferences->PutBool("Show level/window widget", m_Ui->m_ShowLevelWindowWidget->isChecked());
   m_Preferences->PutBool("PACS like mouse interaction", m_Ui->m_PACSLikeMouseMode->isChecked());
   m_Preferences->PutInt("Rendering Mode", m_Ui->m_RenderingMode->currentIndex());
+  m_Preferences->PutBool("Show Department Logo", m_Ui->m_ShowDepartmentLogo->isChecked());
 
   return true;
 }
@@ -158,6 +159,7 @@ void QmitkStdMultiWidgetEditorPreferencePage::Update()
   m_Ui->m_PACSLikeMouseMode->setChecked(m_Preferences->GetBool("PACS like mouse interaction", false));
   int mode= m_Preferences->GetInt("Rendering Mode",0);
   m_Ui->m_RenderingMode->setCurrentIndex(mode);
+  m_Ui->m_ShowDepartmentLogo->setChecked(m_Preferences->GetBool("Show Department Logo", false));
   m_Ui->m_CrosshairGapSize->setValue(m_Preferences->GetInt("crosshair gap size", 32));
 }
 
