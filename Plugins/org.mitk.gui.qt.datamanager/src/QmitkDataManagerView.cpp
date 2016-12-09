@@ -143,6 +143,7 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
   m_NodeTreeView->setHeaderHidden(true);
   m_NodeTreeView->setSelectionMode( QAbstractItemView::ExtendedSelection );
   m_NodeTreeView->setSelectionBehavior( QAbstractItemView::SelectRows );
+  m_NodeTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
   m_NodeTreeView->setAlternatingRowColors(true);
   m_NodeTreeView->setDragEnabled(true);
   m_NodeTreeView->setDropIndicatorShown(true);
@@ -152,8 +153,8 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
   m_NodeTreeView->setTextElideMode(Qt::ElideMiddle);
   m_NodeTreeView->installEventFilter(new QmitkNodeTableViewKeyFilter(this));
 
-  m_ItemDelegate = new QmitkDataManagerItemDelegate(m_NodeTreeView);
-  m_NodeTreeView->setItemDelegate(m_ItemDelegate);
+  // m_ItemDelegate = new QmitkDataManagerItemDelegate(m_NodeTreeView);
+  // m_NodeTreeView->setItemDelegate(m_ItemDelegate);
 
   QObject::connect( m_NodeTreeView, SIGNAL(customContextMenuRequested(const QPoint&))
     , this, SLOT(NodeTableViewContextMenuRequested(const QPoint&)) );
@@ -211,11 +212,11 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
   unknownDataNodeDescriptor->AddAction(saveAction);
   m_DescriptorActionList.push_back(std::pair<QmitkNodeDescriptor*, QAction*>(unknownDataNodeDescriptor,saveAction));
 
-  QAction* removeAction = new QAction(QIcon(":/org.mitk.gui.qt.datamanager/Remove_48.png"), "Remove", this);
-  QObject::connect( removeAction, SIGNAL( triggered(bool) )
-    , this, SLOT( RemoveSelectedNodes(bool) ) );
-  unknownDataNodeDescriptor->AddAction(removeAction);
-  m_DescriptorActionList.push_back(std::pair<QmitkNodeDescriptor*, QAction*>(unknownDataNodeDescriptor,removeAction));
+  // QAction* removeAction = new QAction(QIcon(":/org.mitk.gui.qt.datamanager/Remove_48.png"), "Remove", this);
+  // QObject::connect( removeAction, SIGNAL( triggered(bool) )
+  //   , this, SLOT( RemoveSelectedNodes(bool) ) );
+  // unknownDataNodeDescriptor->AddAction(removeAction);
+  // m_DescriptorActionList.push_back(std::pair<QmitkNodeDescriptor*, QAction*>(unknownDataNodeDescriptor,removeAction));
 
   QAction* reinitAction = new QAction(QIcon(":/org.mitk.gui.qt.datamanager/Refresh_48.png"), "Reinit", this);
   QObject::connect( reinitAction, SIGNAL( triggered(bool) )
