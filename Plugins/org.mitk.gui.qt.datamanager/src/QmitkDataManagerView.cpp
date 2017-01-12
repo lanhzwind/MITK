@@ -381,10 +381,12 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
   m_DescriptorActionList.push_back(std::pair<QmitkNodeDescriptor*, QAction*>(surfaceDataNodeDescriptor, m_SurfaceRepresentation));
   QmitkNodeDescriptor* svModelDataNodeDescriptor =
     QmitkNodeDescriptorManager::GetInstance()->GetDescriptor("svModel");
-  svModelDataNodeDescriptor->AddAction(m_SurfaceRepresentation, false);
+  if(svModelDataNodeDescriptor)
+    svModelDataNodeDescriptor->AddAction(m_SurfaceRepresentation, false);
   QmitkNodeDescriptor* meshDataNodeDescriptor =
     QmitkNodeDescriptorManager::GetInstance()->GetDescriptor("svMitkMesh");
-  meshDataNodeDescriptor->AddAction(m_SurfaceRepresentation, false);
+  if(meshDataNodeDescriptor)
+    meshDataNodeDescriptor->AddAction(m_SurfaceRepresentation, false);
 
   QAction* showOnlySelectedNodes
     = new QAction(QIcon(":/org.mitk.gui.qt.datamanager/ShowSelectedNode_48.png")
