@@ -96,6 +96,8 @@ public:
 
   void FullScreenMode(bool state);
 
+  void SetWindowMenuEventAble(bool able);
+
 protected:
   // overloaded move handler
   virtual void moveEvent(QMoveEvent* event) override;

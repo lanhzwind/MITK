@@ -284,6 +284,11 @@ void QmitkRenderWindow::ActivateMenuWidget(bool state, QmitkStdMultiWidget* stdM
   }
 }
 
+void QmitkRenderWindow::SetWindowMenuEventAble(bool able)
+{
+  m_MenuWidget->SetEventAble(able);
+}
+
 void QmitkRenderWindow::AdjustRenderWindowMenuVisibility(const QPoint& /*pos*/)
 {
   if (m_MenuWidget)
