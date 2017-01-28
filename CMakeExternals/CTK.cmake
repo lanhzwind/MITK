@@ -26,6 +26,12 @@ if(MITK_USE_CTK)
         list(APPEND proj_DEPENDENCIES Python)
       endif()
       list(APPEND ctk_optional_cache_args
+           if(DEFINED EXTERNAL_VTK_DIR)
+	     -DVTK_DIR:PATH=${EXTERNAL_VTK_DIR}
+	   endif()
+           -DCTK_LIB_Visualization/VTK/Core:BOOL=ON
+           -DCTK_LIB_Scripting/Python/Core:BOOL=ON
+	   -DCTK_LIB_Scripting/Python/Core_PYTHONQT_USE_VTK:BOOL=ON
            -DCTK_LIB_Scripting/Python/Widgets:BOOL=ON
            -DCTK_ENABLE_Python_Wrapping:BOOL=ON
            -DCTK_APP_ctkSimplePythonShell:BOOL=ON

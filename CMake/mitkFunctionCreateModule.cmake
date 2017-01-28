@@ -340,7 +340,7 @@ function(mitk_create_module)
       set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
     endif()
 
-    if(MODULE_WARNINGS_AS_ERRORS)
+    if(MODULE_WARNINGS_AS_ERRORS_IGNORED)
       if(MSVC_VERSION)
         mitkFunctionCheckCAndCXXCompilerFlags("/WX" module_c_flags module_cxx_flags)
       else()
@@ -566,15 +566,11 @@ function(mitk_create_module)
       if (NOT MODULE_EXECUTABLE)
         set(_export_macro_name )
         if(MITK_LEGACY_EXPORT_MACRO_NAME)
-
-          string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
-          string(TOUPPER ${MODULE_EXPORT_DEFINE} MODULE_EXPORT_DEFINE)
-
           set(_export_macro_names
             EXPORT_MACRO_NAME ${MODULE_EXPORT_DEFINE}
-            NO_EXPORT_MACRO_NAME ${MODULE_NAME_UPPER}_NO_EXPORT
-            DEPRECATED_MACRO_NAME ${MODULE_NAME_UPPER}_DEPRECATED
-            NO_DEPRECATED_MACRO_NAME ${MODULE_NAME_UPPER}_NO_DEPRECATED
+            NO_EXPORT_MACRO_NAME ${MODULE_NAME}_NO_EXPORT
+            DEPRECATED_MACRO_NAME ${MODULE_NAME}_DEPRECATED
+            NO_DEPRECATED_MACRO_NAME ${MODULE_NAME}_NO_DEPRECATED
           )
         endif()
         generate_export_header(${MODULE_NAME}

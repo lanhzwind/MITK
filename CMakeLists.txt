@@ -204,7 +204,7 @@ env_option(MITK_USE_QT "Use Qt library" ON)
 
 if(MITK_USE_QT)
   set(MITK_QT5_MINIMUM_VERSION 5.0.0)
-  set(MITK_QT5_COMPONENTS Concurrent OpenGL PrintSupport Script Sql Svg Widgets WebKitWidgets Xml XmlPatterns UiTools Help LinguistTools)
+  set(MITK_QT5_COMPONENTS Concurrent OpenGL PrintSupport Script Sql Svg Widgets WebKitWidgets Xml XmlPatterns UiTools Help)
   if(APPLE)
     set(MITK_QT5_COMPONENTS ${MITK_QT5_COMPONENTS} DBus)
   endif()
@@ -830,10 +830,11 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH}
   )
 
-if(MITK_USE_GDCM)
-  find_package(GDCM REQUIRED)
-  include(${GDCM_USE_FILE})
-endif()
+# 2017-01-27:  This doesn't seem to be necessary for our builds with sv_externals
+#if(MITK_USE_GDCM)
+#  find_package(GDCM REQUIRED)
+#  include(${GDCM_USE_FILE})
+#endif()
 
 if(MITK_USE_DCMTK)
   # Due to the preferred CONFIG mode in find_package calls above,

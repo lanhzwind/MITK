@@ -1,4 +1,5 @@
-find_package(VTK COMPONENTS ${VTK_REQUIRED_COMPONENTS_BY_MODULE} REQUIRED)
+#find_package(VTK COMPONENTS ${VTK_REQUIRED_COMPONENTS_BY_MODULE} REQUIRED)
+find_package(VTK REQUIRED)
 if(VTK_FOUND AND NOT VTK_BUILD_SHARED_LIBS)
   message(FATAL_ERROR "MITK only supports a VTK which was built with shared libraries. Turn on BUILD_SHARED_LIBS in your VTK config.")
 endif()

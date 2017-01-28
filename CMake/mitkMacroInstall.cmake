@@ -170,6 +170,7 @@ macro(_fixup_target)
     set(DIRS \"${_search_paths}\")
 
     set(_additional_search_paths ${_install_LIBRARY_DIRS})
+    set(_additional_search_paths \"${_additional_search_paths};${GDCM_DIR}/../;${VTK_DIR}/../../;${ITK_DIR}/../../\")
     if(_additional_search_paths)
       set(DIRS \"\${DIRS};\${_additional_search_paths}\")
     endif()

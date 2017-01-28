@@ -20,7 +20,7 @@ MITK_CREATE_MODULE(
     PRIVATE ITK
     PUBLIC  VTK|vtkFiltersTexture+vtkFiltersParallel+vtkImagingStencil+vtkImagingMath+vtkInteractionStyle+vtkRenderingOpenGL+vtkRenderingVolumeOpenGL+vtkRenderingFreeTypeOpenGL+vtkRenderingLabel+vtkInteractionWidgets+vtkIOGeometry+vtkIOXML+vtkImagingStatistics
     PUBLIC  Boost
-#  WARNINGS_AS_ERRORS
+  WARNINGS_AS_ERRORS
   SUBPROJECTS MITK-Core
   # Do not automatically create CppMicroServices initialization code.
   # Because the VTK 6 "auto-init" functionality injects file-local static
