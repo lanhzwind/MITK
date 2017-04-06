@@ -26,6 +26,12 @@ if(MITK_USE_DCMTK)
       )
     endif()
 
+    if(LINUX)
+      set(DCMTK_PATCH_FILE DCMTK-3.6.1-linux.patch)
+    else()
+      set(DCMTK_PATCH_FILE DCMTK-3.6.1.patch)
+    endif()
+
     ExternalProject_Add(${proj}
       LIST_SEPARATOR ${sep}
       URL ${MITK_THIRDPARTY_DOWNLOAD_PREFIX_URL}/dcmtk-3.6.1_20121102.tar.gz
@@ -35,7 +41,7 @@ if(MITK_USE_DCMTK)
       # of dcmtk in the same install prefix.
       # The other patches were originally for the Xcode generator, but we always
       # apply them for consistency.
-      PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/DCMTK-3.6.1.patch
+      PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/${DCMTK_PATCH_FILE}
       CMAKE_GENERATOR ${gen}
       CMAKE_ARGS
          ${ep_common_args}
