@@ -36,6 +36,10 @@ QmitkDataStorageFilterProxyModel.cpp
 QmitkDataStorageComboBoxWithSelectNone.cpp
 )
 
+if(APPLE)
+  set(CPP_FILES ${CPP_FILES} QmitkDisableGLHiDPI.mm)
+endif()
+
 set(MOC_H_FILES
   include/QmitkDataStorageComboBox.h
   include/QmitkDataStorageTableModel.h
