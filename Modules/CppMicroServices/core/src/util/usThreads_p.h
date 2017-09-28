@@ -59,6 +59,13 @@
     #endif
     #include <windows.h>
 
+    // 2016-12-09 - problems with maro replacement on msvc 2013
+    #ifdef UNICODE
+    #define CreateMutex  CreateMutexW
+    #else
+    #define CreateMutex  CreateMutexA
+    #endif // !UNICODE
+
     #define US_THREADS_MUTEX(x)           HANDLE (x);
     #define US_THREADS_MUTEX_INIT(x)
     #define US_THREADS_MUTEX_CTOR(x)      : x(::CreateMutex(NULL, FALSE, NULL))
