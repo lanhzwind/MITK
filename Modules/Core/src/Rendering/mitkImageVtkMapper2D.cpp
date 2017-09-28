@@ -52,6 +52,8 @@ See LICENSE.txt or http://www.mitk.org for details.
 #include <vtkCellArray.h>
 #include <vtkCamera.h>
 #include <vtkColorTransferFunction.h>
+#include <vtkImageGradientMagnitude.h>
+#include <vtkImageHistogramStatistics.h>
 
 //ITK
 #include <itkRGBAPixel.h>
@@ -166,6 +168,13 @@ void mitk::ImageVtkMapper2D::GenerateDataForRenderer( mitk::BaseRenderer *render
   datanode->GetBoolProperty("in plane resample extent by geometry", inPlaneResampleExtentByGeometry, renderer);
   localStorage->m_Reslicer->SetInPlaneResampleExtentByGeometry(inPlaneResampleExtentByGeometry);
 
+  bool inPlaneResampleSizeByGeometry = false;
+  datanode->GetBoolProperty("in plane resample size by geometry", inPlaneResampleSizeByGeometry, renderer);
+  localStorage->m_Reslicer->SetInPlaneResampleSizeByGeometry(inPlaneResampleSizeByGeometry);
+
+  bool inPlaneResampleExtentByMinimumSpacing = false;
+  datanode->GetBoolProperty("in plane resample extent by minimum spacing", inPlaneResampleExtentByMinimumSpacing, renderer);
+  localStorage->m_Reslicer->SetInPlaneResampleExtentByMinimumSpacing(inPlaneResampleExtentByMinimumSpacing);
 
   // Initialize the interpolation mode for resampling; switch to nearest
   // neighbor if the input image is too small.
@@ -288,6 +297,60 @@ void mitk::ImageVtkMapper2D::GenerateDataForRenderer( mitk::BaseRenderer *render
     localStorage->m_ReslicedImage = localStorage->m_Reslicer->GetVtkOutput();
   }
 
+  bool showGradient= false;
+  datanode->GetBoolProperty("show gradient", showGradient, renderer);
+  if (showGradient)
+  {
+	  vtkSmartPointer<vtkImageGradientMagnitude> gradientFilter = vtkSmartPointer<vtkImageGradientMagnitude>::New();
+      gradientFilter->HandleBoundariesOn();
+      gradientFilter->SetInputData(localStorage->m_ReslicedImage);
+      gradientFilter->Update();
+
+      // "background" pixels produce very large gradients at border
+      int extent[6];
+      gradientFilter->GetOutput()->GetExtent(extent);
+
+      for (int y = extent[2]; y <=extent[3] ; ++y)
+      {
+          for (int x = extent[0]; x <= extent[1]; ++x)
+          {
+              if (fabsf(localStorage->m_ReslicedImage->GetScalarComponentAsDouble(x, y, 0, 0) - (-32768.0)) < 1e-3)
+              {
+            	  gradientFilter->GetOutput()->SetScalarComponentFromDouble(x, y, 0, 0, 0);
+              }
+
+              int offsets[][2] = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+
+              for (size_t i = 0; i < sizeof(offsets) / sizeof(offsets[0]); ++i) {
+                  int xoff = x + offsets[i][0];
+                  int yoff = y + offsets[i][1];
+
+                  if (xoff < extent[0] || xoff > extent[1] || yoff < extent[2] || yoff > extent[3]) {
+                      continue;
+                  }
+
+                  if (fabsf(localStorage->m_ReslicedImage->GetScalarComponentAsDouble(xoff, yoff, 0, 0) - (-32768.0)) < 1e-3)
+                  {
+                	  gradientFilter->GetOutput()->SetScalarComponentFromDouble(x, y, 0, 0, 0);
+                      break;
+                  }
+              }
+          }
+      }
+
+      localStorage->m_ReslicedImage = gradientFilter->GetOutput();
+
+      vtkSmartPointer<vtkImageHistogramStatistics> stats = vtkSmartPointer<vtkImageHistogramStatistics>::New();
+      stats->SetInputData(localStorage->m_ReslicedImage);
+      stats->GenerateHistogramImageOff();
+      stats->Update();
+
+      mitk::LevelWindow levelWindow;
+      levelWindow.SetRangeMinMax(stats->GetAutoRange()[0], stats->GetAutoRange()[1]);
+      levelWindow.SetWindowBounds(stats->GetAutoRange()[0], stats->GetAutoRange()[1]);
+      datanode->SetLevelWindow(levelWindow, renderer, "gradientlevelwindow");
+  }
+
   // Bounds information for reslicing (only reuqired if reference geometry
   // is present)
   //this used for generating a vtkPLaneSource with the right size
@@ -296,7 +359,20 @@ void mitk::ImageVtkMapper2D::GenerateDataForRenderer( mitk::BaseRenderer *render
   {
     sliceBound = 0.0;
   }
-  localStorage->m_Reslicer->GetClippedPlaneBounds(sliceBounds);
+
+  if(inPlaneResampleSizeByGeometry)
+  {
+      double widthInMM = planeGeometry->GetExtentInMM( 0 );
+      double heightInMM = planeGeometry->GetExtentInMM( 1 );
+      sliceBounds[0] = 0.0;
+      sliceBounds[1] = widthInMM;
+      sliceBounds[2] = 0.0;
+      sliceBounds[3] = heightInMM;
+  }
+  else
+  {
+    localStorage->m_Reslicer->GetClippedPlaneBounds(sliceBounds);
+  }
 
   //get the spacing of the slice
   localStorage->m_mmPerPixel = localStorage->m_Reslicer->GetOutputSpacing();
@@ -308,16 +384,29 @@ void mitk::ImageVtkMapper2D::GenerateDataForRenderer( mitk::BaseRenderer *render
     {
       textureClippingBound = 0.0;
     }
-    // Calculate the actual bounds of the transformed plane clipped by the
-    // dataset bounding box; this is required for drawing the texture at the
-    // correct position during 3D mapping.
-    mitk::PlaneClipping::CalculateClippedPlaneBounds( input->GetGeometry(), planeGeometry, textureClippingBounds );
 
-    textureClippingBounds[0] = static_cast< int >( textureClippingBounds[0] / localStorage->m_mmPerPixel[0] + 0.5 );
-    textureClippingBounds[1] = static_cast< int >( textureClippingBounds[1] / localStorage->m_mmPerPixel[0] + 0.5 );
-    textureClippingBounds[2] = static_cast< int >( textureClippingBounds[2] / localStorage->m_mmPerPixel[1] + 0.5 );
-    textureClippingBounds[3] = static_cast< int >( textureClippingBounds[3] / localStorage->m_mmPerPixel[1] + 0.5 );
+    if(inPlaneResampleSizeByGeometry)
+    {
+        double widthInMM = planeGeometry->GetExtentInMM( 0 );
+        double heightInMM = planeGeometry->GetExtentInMM( 1 );
 
+        textureClippingBounds[0] = 0.0;
+        textureClippingBounds[1] = widthInMM / localStorage->m_mmPerPixel[0];
+        textureClippingBounds[2] = 0.0;
+        textureClippingBounds[3] = heightInMM / localStorage->m_mmPerPixel[1];
+    }
+    else
+    {
+        // Calculate the actual bounds of the transformed plane clipped by the
+        // dataset bounding box; this is required for drawing the texture at the
+        // correct position during 3D mapping.
+        mitk::PlaneClipping::CalculateClippedPlaneBounds( input->GetGeometry(), planeGeometry, textureClippingBounds );
+
+        textureClippingBounds[0] = static_cast< int >( textureClippingBounds[0] / localStorage->m_mmPerPixel[0] + 0.5 );
+        textureClippingBounds[1] = static_cast< int >( textureClippingBounds[1] / localStorage->m_mmPerPixel[0] + 0.5 );
+        textureClippingBounds[2] = static_cast< int >( textureClippingBounds[2] / localStorage->m_mmPerPixel[1] + 0.5 );
+        textureClippingBounds[3] = static_cast< int >( textureClippingBounds[3] / localStorage->m_mmPerPixel[1] + 0.5 );
+    }
     //clipping bounds for cutting the image
     localStorage->m_LevelWindowFilter->SetClippingBounds(textureClippingBounds);
   }
@@ -439,7 +528,10 @@ void mitk::ImageVtkMapper2D::ApplyLevelWindow(mitk::BaseRenderer *renderer)
   LocalStorage *localStorage = this->GetLocalStorage( renderer );
 
   LevelWindow levelWindow;
-  this->GetDataNode()->GetLevelWindow( levelWindow, renderer, "levelwindow" );
+//  this->GetDataNode()->GetLevelWindow( levelWindow, renderer, "levelwindow" );
+  bool showGradient = false;
+  this->GetDataNode()->GetBoolProperty("show gradient", showGradient, renderer);
+  this->GetDataNode()->GetLevelWindow( levelWindow, renderer, showGradient? "gradientlevelwindow" : "levelwindow" );
   localStorage->m_LevelWindowFilter->GetLookupTable()->SetRange( levelWindow.GetLowerWindowBound(), levelWindow.GetUpperWindowBound() );
 
   mitk::LevelWindow opacLevelWindow;
@@ -591,7 +683,7 @@ void mitk::ImageVtkMapper2D::ApplyLookuptable( mitk::BaseRenderer* renderer )
   vtkLookupTable* usedLookupTable = localStorage->m_ColorLookupTable;
 
   // If lookup table or transferfunction use is requested...
-  mitk::LookupTableProperty::Pointer lookupTableProp = dynamic_cast<mitk::LookupTableProperty*>(this->GetDataNode()->GetProperty("LookupTable"));
+  mitk::LookupTableProperty::Pointer lookupTableProp = dynamic_cast<mitk::LookupTableProperty*>(this->GetDataNode()->GetProperty("LookupTable", renderer));
 
   if( lookupTableProp.IsNotNull() ) // is a lookuptable set?
   {
@@ -686,6 +778,8 @@ void mitk::ImageVtkMapper2D::SetDefaultProperties(mitk::DataNode* node, mitk::Ba
   else node->AddProperty( "reslice interpolation", mitk::VtkResliceInterpolationProperty::New() );
   node->AddProperty( "texture interpolation", mitk::BoolProperty::New( false ) );
   node->AddProperty( "in plane resample extent by geometry", mitk::BoolProperty::New( false ) );
+  node->AddProperty( "in plane resample size by geometry", mitk::BoolProperty::New( false ) );
+  node->AddProperty( "in plane resample extent by minimum spacing", mitk::BoolProperty::New( false ) );
   node->AddProperty( "bounding box", mitk::BoolProperty::New( false ) );
 
   mitk::RenderingModeProperty::Pointer renderingModeProperty = mitk::RenderingModeProperty::New();

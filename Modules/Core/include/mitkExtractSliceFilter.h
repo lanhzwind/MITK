@@ -85,6 +85,10 @@ namespace mitk
     /** \brief Resampling grid corresponds to: false->image    true->worldgeometry*/
     void SetInPlaneResampleExtentByGeometry(bool inPlaneResampleExtentByGeometry){ this->m_InPlaneResampleExtentByGeometry = inPlaneResampleExtentByGeometry; }
 
+    void SetInPlaneResampleSizeByGeometry(bool inPlaneResampleSizeByGeometry){ this->m_InPlaneResampleSizeByGeometry = inPlaneResampleSizeByGeometry; }
+
+    void SetInPlaneResampleExtentByMinimumSpacing(bool inPlaneResampleExtentByMinimumSpacing){this->m_InPlaneResampleExtentByMinimumSpacing = inPlaneResampleExtentByMinimumSpacing;}
+
     /** \brief Sets the output dimension of the slice*/
     void SetOutputDimensionality(unsigned int dimension){ this->m_OutputDimension = dimension; }
 
@@ -167,6 +171,10 @@ namespace mitk
     BaseGeometry::ConstPointer m_ResliceTransform;
 
     bool m_InPlaneResampleExtentByGeometry;//Resampling grid corresponds to:  false->image    true->worldgeometry
+
+    bool m_InPlaneResampleSizeByGeometry;//Use Renderer Plane extents
+
+    bool m_InPlaneResampleExtentByMinimumSpacing;
 
     mitk::ScalarType* m_OutPutSpacing;
 

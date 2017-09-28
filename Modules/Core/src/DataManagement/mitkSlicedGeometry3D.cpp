@@ -65,7 +65,7 @@ mitk::SlicedGeometry3D::SlicedGeometry3D(const SlicedGeometry3D& other)
       }
       else
       {
-        PlaneGeometry* geometry2D = other.m_PlaneGeometries[s]->Clone();
+        PlaneGeometry::Pointer geometry2D = other.m_PlaneGeometries[s]->Clone();
         assert(geometry2D!=nullptr);
         SetPlaneGeometry(geometry2D, s);
       }

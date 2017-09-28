@@ -310,6 +310,13 @@ namespace mitk
         tubeRadius = sqrt( m_SurfaceCreator->GetBoundingBox()->GetDiagonalLength2() ) / 450.0;
       }
 
+      bool useGeometryBoundingBox = false;
+      if(GetDataNode()->GetBoolProperty("in plane resample size by geometry", useGeometryBoundingBox, renderer))
+      {
+          if(useGeometryBoundingBox)
+        	  m_SurfaceCreator->SetUseBoundingBox(false);
+      }
+
       // Calculate the surface of the PlaneGeometry
       m_SurfaceCreator->Update();
       Surface *surface = m_SurfaceCreator->GetOutput();
