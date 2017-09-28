@@ -95,6 +95,9 @@ public:
 
   void NotifyNewWidgetPlanesMode( int mode );
 
+  void SetEventAble( bool able)
+  { m_EventAble=able; }
+
 protected:
 
   /*! Create menu widget. The menu contains five QPushButtons (hori-split, verti-split, full-screen, settings and close button)
@@ -310,6 +313,8 @@ protected:
   bool                m_FullScreenMode;
 
   bool                m_Entered;
+
+  bool                m_EventAble;
 
   private:
 
