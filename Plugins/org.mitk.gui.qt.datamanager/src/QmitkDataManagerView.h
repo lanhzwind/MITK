@@ -72,6 +72,8 @@ public:
   ///
   virtual ~QmitkDataManagerView();
 
+  QTreeView* GetTreeView(){return m_NodeTreeView;}
+
 public slots:
   ///
   /// Invoked when the opacity slider changed

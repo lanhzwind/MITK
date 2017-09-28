@@ -96,7 +96,7 @@ void QmitkDataManagerPreferencePage::PerformCancel()
 void QmitkDataManagerPreferencePage::Update()
 {
   m_EnableSingleEditing->setChecked(m_DataManagerPreferencesNode->GetBool("Single click property editing", true));
-  m_PlaceNewNodesOnTop->setChecked(m_DataManagerPreferencesNode->GetBool("Place new nodes on top", true));
+  m_PlaceNewNodesOnTop->setChecked(m_DataManagerPreferencesNode->GetBool("Place new nodes on top", false));
   m_ShowHelperObjects->setChecked(m_DataManagerPreferencesNode->GetBool("Show helper objects", false));
   m_ShowNodesContainingNoData->setChecked(m_DataManagerPreferencesNode->GetBool("Show nodes containing no data", false));
   m_UseSurfaceDecimation->setChecked(m_DataManagerPreferencesNode->GetBool("Use surface decimation", true));

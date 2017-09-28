@@ -125,7 +125,7 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
   m_NodeTreeModel = new QmitkDataStorageTreeModel(this->GetDataStorage());
   m_NodeTreeModel->setParent( parent );
   m_NodeTreeModel->SetPlaceNewNodesOnTop(
-      prefs->GetBool("Place new nodes on top", true) );
+      prefs->GetBool("Place new nodes on top", false) );
   m_SurfaceDecimation = prefs->GetBool("Use surface decimation", false);
   // Prepare filters
   m_HelperObjectFilterPredicate = mitk::NodePredicateOr::New(
@@ -143,6 +143,7 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
   m_NodeTreeView->setHeaderHidden(true);
   m_NodeTreeView->setSelectionMode( QAbstractItemView::ExtendedSelection );
   m_NodeTreeView->setSelectionBehavior( QAbstractItemView::SelectRows );
+  m_NodeTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
   m_NodeTreeView->setAlternatingRowColors(true);
   m_NodeTreeView->setDragEnabled(true);
   m_NodeTreeView->setDropIndicatorShown(true);
@@ -152,8 +153,8 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
   m_NodeTreeView->setTextElideMode(Qt::ElideMiddle);
   m_NodeTreeView->installEventFilter(new QmitkNodeTableViewKeyFilter(this));
 
-  m_ItemDelegate = new QmitkDataManagerItemDelegate(m_NodeTreeView);
-  m_NodeTreeView->setItemDelegate(m_ItemDelegate);
+  // m_ItemDelegate = new QmitkDataManagerItemDelegate(m_NodeTreeView);
+  // m_NodeTreeView->setItemDelegate(m_ItemDelegate);
 
   QObject::connect( m_NodeTreeView, SIGNAL(customContextMenuRequested(const QPoint&))
     , this, SLOT(NodeTableViewContextMenuRequested(const QPoint&)) );
@@ -211,11 +212,11 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
   unknownDataNodeDescriptor->AddAction(saveAction);
   m_DescriptorActionList.push_back(std::pair<QmitkNodeDescriptor*, QAction*>(unknownDataNodeDescriptor,saveAction));
 
-  QAction* removeAction = new QAction(QIcon(":/org.mitk.gui.qt.datamanager/Remove_48.png"), "Remove", this);
-  QObject::connect( removeAction, SIGNAL( triggered(bool) )
-    , this, SLOT( RemoveSelectedNodes(bool) ) );
-  unknownDataNodeDescriptor->AddAction(removeAction);
-  m_DescriptorActionList.push_back(std::pair<QmitkNodeDescriptor*, QAction*>(unknownDataNodeDescriptor,removeAction));
+  // QAction* removeAction = new QAction(QIcon(":/org.mitk.gui.qt.datamanager/Remove_48.png"), "Remove", this);
+  // QObject::connect( removeAction, SIGNAL( triggered(bool) )
+  //   , this, SLOT( RemoveSelectedNodes(bool) ) );
+  // unknownDataNodeDescriptor->AddAction(removeAction);
+  // m_DescriptorActionList.push_back(std::pair<QmitkNodeDescriptor*, QAction*>(unknownDataNodeDescriptor,removeAction));
 
   QAction* reinitAction = new QAction(QIcon(":/org.mitk.gui.qt.datamanager/Refresh_48.png"), "Reinit", this);
   QObject::connect( reinitAction, SIGNAL( triggered(bool) )
@@ -378,6 +379,14 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
     , this, SLOT( SurfaceRepresentationMenuAboutToShow() ) );
   surfaceDataNodeDescriptor->AddAction(m_SurfaceRepresentation, false);
   m_DescriptorActionList.push_back(std::pair<QmitkNodeDescriptor*, QAction*>(surfaceDataNodeDescriptor, m_SurfaceRepresentation));
+  QmitkNodeDescriptor* svModelDataNodeDescriptor =
+    QmitkNodeDescriptorManager::GetInstance()->GetDescriptor("svModel");
+  if(svModelDataNodeDescriptor)
+    svModelDataNodeDescriptor->AddAction(m_SurfaceRepresentation, false);
+  QmitkNodeDescriptor* meshDataNodeDescriptor =
+    QmitkNodeDescriptorManager::GetInstance()->GetDescriptor("svMitkMesh");
+  if(meshDataNodeDescriptor)
+    meshDataNodeDescriptor->AddAction(m_SurfaceRepresentation, false);
 
   QAction* showOnlySelectedNodes
     = new QAction(QIcon(":/org.mitk.gui.qt.datamanager/ShowSelectedNode_48.png")
@@ -436,11 +445,13 @@ void QmitkDataManagerView::ContextMenuActionTriggered( bool )
   mitk::IContextMenuAction* contextMenuAction = confElem->CreateExecutableExtension<mitk::IContextMenuAction>("class");
 
   QString className = confElem->GetAttribute("class");
-  QString smoothed = confElem->GetAttribute("smoothed");
+  
+  contextMenuAction->SetDataStorage(this->GetDataStorage());
+  contextMenuAction->SetFunctionality(this);
 
   if(className == "QmitkCreatePolygonModelAction")
   {
-    contextMenuAction->SetDataStorage(this->GetDataStorage());
+    QString smoothed = confElem->GetAttribute("smoothed");
     if(smoothed == "false")
     {
       contextMenuAction->SetSmoothed(false);
@@ -451,20 +462,13 @@ void QmitkDataManagerView::ContextMenuActionTriggered( bool )
     }
     contextMenuAction->SetDecimated(m_SurfaceDecimation);
   }
-  else if(className == "QmitkStatisticsAction")
-  {
-    contextMenuAction->SetFunctionality(this);
-  }
-  else if(className == "QmitkCreateSimulationAction")
-  {
-    contextMenuAction->SetDataStorage(this->GetDataStorage());
-  }
+
   contextMenuAction->Run( this->GetCurrentSelection() ); // run the action
 }
 
 void QmitkDataManagerView::OnPreferencesChanged(const berry::IBerryPreferences* prefs)
 {
-  if( m_NodeTreeModel->GetPlaceNewNodesOnTopFlag() !=  prefs->GetBool("Place new nodes on top", true) )
+  if( m_NodeTreeModel->GetPlaceNewNodesOnTopFlag() !=  prefs->GetBool("Place new nodes on top", false) )
     m_NodeTreeModel->SetPlaceNewNodesOnTop( !m_NodeTreeModel->GetPlaceNewNodesOnTopFlag() );
 
   bool hideHelperObjects = !prefs->GetBool("Show helper objects", false);
@@ -910,11 +914,37 @@ void QmitkDataManagerView::ShowInfoDialogForSelectedNodes( bool )
   _QmitkInfoDialog.exec();
 }
 
-void QmitkDataManagerView::NodeChanged(const mitk::DataNode* /*node*/)
+void QmitkDataManagerView::NodeChanged(const mitk::DataNode* node)
 {
   // m_FilterModel->invalidate();
   // fix as proposed by R. Khlebnikov in the mitk-users mail from 02.09.2014
   QMetaObject::invokeMethod( m_FilterModel, "invalidate", Qt::QueuedConnection );
+
+    mitk::NodePredicateOr::Pointer predicateTypes = mitk::NodePredicateOr::New();
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svImageFolder"));
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svPathFolder"));
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svSegmentationFolder"));
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svModelFolder"));
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svMeshFolder"));
+    predicateTypes->AddPredicate(mitk::NodePredicateDataType::New("svSimulationFolder"));
+
+    if(predicateTypes->CheckNode(node)){
+        bool previousVisible=false;
+        node->GetBoolProperty("previous visibility", previousVisible);
+        bool currentVisible=false;
+        node->GetBoolProperty("visible", currentVisible);
+        if(currentVisible!=previousVisible){
+            mitk::DataStorage::SetOfObjects::ConstPointer rs = this->GetDataStorage()->GetDerivations(node);
+            for(int i=0;i<rs->size();i++){
+                rs->GetElement(i)->SetVisibility(currentVisible);
+            }
+            
+            mitk::DataNode* nodex=const_cast<mitk::DataNode*>(node);
+            nodex->SetBoolProperty("previous visibility",currentVisible);
+        }
+
+    }
+
 }
 
 QItemSelectionModel *QmitkDataManagerView::GetDataNodeSelectionModel() const
