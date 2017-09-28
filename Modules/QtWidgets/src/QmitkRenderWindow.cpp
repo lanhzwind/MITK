@@ -24,6 +24,8 @@
 #include <QTimer>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QSurfaceFormat>
+#include <QWindow>
 #include "mitkMousePressEvent.h"
 #include "mitkMouseMoveEvent.h"
 #include "mitkMouseDoubleClickEvent.h"
@@ -34,6 +36,10 @@
 
 #include "QmitkRenderWindowMenu.h"
 #include "QmitkMimeTypes.h"
+
+#ifdef __APPLE__
+#include "QmitkDisableGLHiDPI.h"
+#endif
 
 QmitkRenderWindow::QmitkRenderWindow(QWidget *parent,
   QString name,
@@ -46,6 +52,10 @@ QmitkRenderWindow::QmitkRenderWindow(QWidget *parent,
   /*QGLFormat newform = this->format();
   newform.setSamples(8);
   this->setFormat(newform);*/
+
+  QSurfaceFormat surfaceFormat = windowHandle()->format();
+  surfaceFormat.setStencilBufferSize(8);
+  windowHandle()->setFormat(surfaceFormat);
 
   if (renderingMode == mitk::BaseRenderer::RenderingMode::DepthPeeling)
   {
@@ -65,6 +75,11 @@ QmitkRenderWindow::QmitkRenderWindow(QWidget *parent,
 
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true);
+
+#ifdef __APPLE__
+  disableGLHiDPI(this->winId());
+#endif
+
 }
 
 QmitkRenderWindow::~QmitkRenderWindow()
@@ -267,6 +282,11 @@ void QmitkRenderWindow::ActivateMenuWidget(bool state, QmitkStdMultiWidget* stdM
     connect(m_MenuWidget, SIGNAL( ResetView() ), this, SIGNAL( ResetView()));
     connect(m_MenuWidget, SIGNAL( ChangeCrosshairRotationMode(int) ), this, SIGNAL( ChangeCrosshairRotationMode(int)));
   }
+}
+
+void QmitkRenderWindow::SetWindowMenuEventAble(bool able)
+{
+  m_MenuWidget->SetEventAble(able);
 }
 
 void QmitkRenderWindow::AdjustRenderWindowMenuVisibility(const QPoint& /*pos*/)
