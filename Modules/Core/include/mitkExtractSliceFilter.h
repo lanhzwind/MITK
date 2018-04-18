@@ -89,6 +89,8 @@ namespace mitk
 
     void SetInPlaneResampleExtentByMinimumSpacing(bool inPlaneResampleExtentByMinimumSpacing){this->m_InPlaneResampleExtentByMinimumSpacing = inPlaneResampleExtentByMinimumSpacing;}
 
+    void SetInPlaneResampleSpacingFactor(double inPlaneResampleSpacingFactor){this->m_InPlaneResampleSpacingFactor = inPlaneResampleSpacingFactor;}
+
     /** \brief Sets the output dimension of the slice*/
     void SetOutputDimensionality(unsigned int dimension){ this->m_OutputDimension = dimension; }
 
@@ -175,6 +177,8 @@ namespace mitk
     bool m_InPlaneResampleSizeByGeometry;//Use Renderer Plane extents
 
     bool m_InPlaneResampleExtentByMinimumSpacing;
+
+    double m_InPlaneResampleSpacingFactor;
 
     mitk::ScalarType* m_OutPutSpacing;
 

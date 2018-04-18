@@ -176,6 +176,10 @@ void mitk::ImageVtkMapper2D::GenerateDataForRenderer( mitk::BaseRenderer *render
   datanode->GetBoolProperty("in plane resample extent by minimum spacing", inPlaneResampleExtentByMinimumSpacing, renderer);
   localStorage->m_Reslicer->SetInPlaneResampleExtentByMinimumSpacing(inPlaneResampleExtentByMinimumSpacing);
 
+  float inPlaneResampleSpacingFactor = 1.0f;
+  datanode->GetFloatProperty("in plane resample spacing factor", inPlaneResampleSpacingFactor, renderer);
+  localStorage->m_Reslicer->SetInPlaneResampleSpacingFactor(inPlaneResampleSpacingFactor);
+
   // Initialize the interpolation mode for resampling; switch to nearest
   // neighbor if the input image is too small.
   if ( (input->GetDimension() >= 3) && (input->GetDimension(2) > 1) )
@@ -780,6 +784,7 @@ void mitk::ImageVtkMapper2D::SetDefaultProperties(mitk::DataNode* node, mitk::Ba
   node->AddProperty( "in plane resample extent by geometry", mitk::BoolProperty::New( false ) );
   node->AddProperty( "in plane resample size by geometry", mitk::BoolProperty::New( false ) );
   node->AddProperty( "in plane resample extent by minimum spacing", mitk::BoolProperty::New( false ) );
+  node->AddProperty( "in plane resample spacing factor", mitk::FloatProperty::New(1.0));
   node->AddProperty( "bounding box", mitk::BoolProperty::New( false ) );
 
   mitk::RenderingModeProperty::Pointer renderingModeProperty = mitk::RenderingModeProperty::New();

@@ -38,6 +38,7 @@ mitk::ExtractSliceFilter::ExtractSliceFilter(vtkImageReslice* reslicer ){
   m_InPlaneResampleExtentByGeometry = false;
   m_InPlaneResampleSizeByGeometry = false;
   m_InPlaneResampleExtentByMinimumSpacing = false;
+  m_InPlaneResampleSpacingFactor = 1.0;
   m_OutPutSpacing = new mitk::ScalarType[2];
   m_OutputDimension = 2;
   m_ZSpacing = 1.0;
@@ -194,9 +195,11 @@ void mitk::ExtractSliceFilter::GenerateData(){
       else if(m_InPlaneResampleExtentByMinimumSpacing)
       {
     	    const mitk::Vector3D &imageSpacing = inputTimeGeometry->GetGeometryForTimeStep(0)->GetSpacing();
-            double minSpacing=std::min(imageSpacing[0],std::min(imageSpacing[1],imageSpacing[2]));
-            extent[0]=planeGeometry->GetExtentInMM( 0 )/minSpacing;
-            extent[1]=planeGeometry->GetExtentInMM( 1 )/minSpacing;
+            double actualSpacing=std::min(imageSpacing[0],std::min(imageSpacing[1],imageSpacing[2]));
+            actualSpacing*=m_InPlaneResampleSpacingFactor;
+
+            extent[0]=planeGeometry->GetExtentInMM( 0 )/actualSpacing;
+            extent[1]=planeGeometry->GetExtentInMM( 1 )/actualSpacing;
       }
       else
       {
