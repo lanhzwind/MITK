@@ -64,14 +64,18 @@ void NativeTabItem::SetInfo(const PartInfo& info)
   QTabBar* widget = parent->GetTabFolder();
 
   int index = parent->IndexOf(this);
-  if (widget->tabText(index) != info.name)
+  // if (widget->tabText(index) != info.name)
+  if (widget->tabText(index) != tr(info.name.toStdString().c_str()))
   {
-    widget->setTabText(index, info.name);
+    // widget->setTabText(index, info.name);
+    widget->setTabText(index, tr(info.name.toStdString().c_str()));
   }
 
-  if (widget->tabToolTip(index) != info.toolTip)
+  // if (widget->tabToolTip(index) != info.toolTip)
+  if (widget->tabToolTip(index) != tr(info.toolTip.toStdString().c_str()))
   {
-    widget->setTabToolTip(index, info.toolTip);
+    // widget->setTabToolTip(index, info.toolTip);
+    widget->setTabToolTip(index, tr(info.toolTip.toStdString().c_str()));
   }
 
   if (widget->tabIcon(index).cacheKey() != info.image.cacheKey())
