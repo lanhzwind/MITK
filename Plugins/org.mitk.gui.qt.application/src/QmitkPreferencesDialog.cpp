@@ -32,6 +32,7 @@ See LICENSE.txt or http://www.mitk.org for details.
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QApplication>
 
 #include <algorithm>
 
@@ -85,7 +86,8 @@ public:
     for (prefPagesIt = prefPages.begin(); prefPagesIt != prefPages.end(); ++prefPagesIt)
     {
       QString id = (*prefPagesIt)->GetAttribute("id");
-      QString name = (*prefPagesIt)->GetAttribute("name");
+      // QString name = (*prefPagesIt)->GetAttribute("name");
+      QString name = QApplication::translate("QmitkPreferencesDialog",(*prefPagesIt)->GetAttribute("name").toStdString().c_str());
       QString className = (*prefPagesIt)->GetAttribute("class");
       if(!id.isEmpty() && !name.isEmpty() && !className.isEmpty())
       {
