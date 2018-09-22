@@ -29,6 +29,7 @@ See LICENSE.txt or http://www.mitk.org for details.
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QApplication>
 
 class QmitkFileSaveActionPrivate
 {
@@ -63,8 +64,8 @@ public:
     m_Window = berry::IWorkbenchWindow::Pointer(window);
     m_Action = action;
 
-    action->setText("&Save...");
-    action->setToolTip("Save data objects (images, surfaces,...)");
+    action->setText(QApplication::translate("QmitkFileSaveAction","&Save..."));
+    action->setToolTip(QApplication::translate("QmitkFileSaveAction","Save data objects (images, surfaces,...)"));
 
     berry::ISelectionService* selectionService = m_Window.Lock()->GetSelectionService();
     setEnabled(selectionService->GetSelection());
@@ -162,7 +163,7 @@ void QmitkFileSaveAction::Run()
   mitk::DataNodeSelection::ConstPointer selection = d->m_Window.Lock()->GetSelectionService()->GetSelection().Cast<const mitk::DataNodeSelection>();
   if (selection.IsNull() || selection->IsEmpty())
   {
-    MITK_ERROR << "Assertion failed: data node selection is NULL or empty";
+    MITK_ERROR << tr("Assertion failed: data node selection is NULL or empty").toStdString();
     return;
   }
 

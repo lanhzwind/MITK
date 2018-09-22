@@ -142,10 +142,10 @@ QmitkPreferencesDialog::QmitkPreferencesDialog(QWidget * parent, Qt::WindowFlags
 
   QObject::connect(d->m_PreferencesTree, SIGNAL(itemSelectionChanged()), this, SLOT(OnPreferencesTreeItemSelectionChanged()));
 
-  QPushButton* importButton = d->buttonBox->addButton("Import...", QDialogButtonBox::ActionRole);
+  QPushButton* importButton = d->buttonBox->addButton(tr("Import..."), QDialogButtonBox::ActionRole);
   QObject::connect(importButton, SIGNAL(clicked()), this, SLOT(OnImportButtonClicked()));
 
-  QPushButton* exportButton = d->buttonBox->addButton("Export...", QDialogButtonBox::ActionRole);
+  QPushButton* exportButton = d->buttonBox->addButton(tr("Export..."), QDialogButtonBox::ActionRole);
   QObject::connect(exportButton, SIGNAL(clicked()), this, SLOT(OnExportButtonClicked()));
 
   QObject::connect(this, SIGNAL(accepted()), this, SLOT(OnDialogAccepted()));
@@ -174,8 +174,8 @@ void QmitkPreferencesDialog::SetSelectedPage(const QString& id)
 
 void QmitkPreferencesDialog::OnImportButtonClicked()
 {
-  int answer = QMessageBox::question(this, "Importing Preferences"
-    , "All existing preferences will be overwritten!\nAre you sure that you want to import other preferences?", QMessageBox::Yes | QMessageBox::No );
+  int answer = QMessageBox::question(this, tr("Importing Preferences")
+    , tr("All existing preferences will be overwritten!\nAre you sure that you want to import other preferences?"), QMessageBox::Yes | QMessageBox::No );
   if(answer == QMessageBox::No)
     return;
 
@@ -197,18 +197,18 @@ void QmitkPreferencesDialog::OnImportButtonClicked()
         if(prefPage)
           prefPage->Update();
 
-        MITK_INFO("QmitkPreferencesDialog") << "Preferences successfully imported from " << fileName;
+        MITK_INFO("QmitkPreferencesDialog") << tr("Preferences successfully imported from ").toStdString() << fileName;
       }
     }
   }
   catch (Poco::Exception& pe)
   {
-    QMessageBox::critical(this, "Error Importing", pe.message().c_str());
+    QMessageBox::critical(this, tr("Error Importing"), pe.message().c_str());
     MITK_ERROR("QmitkPreferencesDialog") << pe.what();
   }
   catch (std::exception& e)
   {
-    QMessageBox::critical(this, "Error Importing", e.what());
+    QMessageBox::critical(this, tr("Error Importing"), e.what());
     MITK_ERROR("QmitkPreferencesDialog") << e.what();
   }
 }
@@ -234,18 +234,18 @@ void QmitkPreferencesDialog::OnExportButtonClicked()
         }
         exportDir = QFileInfo(fileName).absoluteDir().path();
         berryPrefService->ExportPreferences(fileName, "");
-        MITK_INFO("QmitkPreferencesDialog") << "Preferences successfully exported to " << fileName;
+        MITK_INFO("QmitkPreferencesDialog") << tr("Preferences successfully exported to ").toStdString() << fileName;
       }
     }
   }
   catch (Poco::Exception& pe)
   {
-    QMessageBox::critical(this, "Error Exporting", pe.message().c_str());
+    QMessageBox::critical(this, tr("Error Exporting"), pe.message().c_str());
     MITK_ERROR("QmitkPreferencesDialog") << pe.what();
   }
   catch (std::exception& e)
   {
-    QMessageBox::critical(this, "Error Exporting", e.what());
+    QMessageBox::critical(this, tr("Error Exporting"), e.what());
     MITK_ERROR("QmitkPreferencesDialog") << e.what();
   }
 }
@@ -398,7 +398,7 @@ void QmitkPreferencesDialog::UpdateTree()
 
   if (!deferredItems.empty())
   {
-    MITK_ERROR << "Unknown preference category. They are added top-level.";
+    MITK_ERROR << tr("Unknown preference category. They are added top-level.").toStdString();
 
     for (const auto &currentItemContent : deferredItems)
     {

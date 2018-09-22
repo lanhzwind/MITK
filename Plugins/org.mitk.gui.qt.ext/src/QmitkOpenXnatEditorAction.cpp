@@ -41,8 +41,8 @@ void QmitkOpenXnatEditorAction::init(berry::IWorkbenchWindow::Pointer window)
 {
   m_Window = window;
   this->setParent(static_cast<QWidget*>(m_Window->GetShell()->GetControl()));
-  this->setText("&XNAT");
-  this->setToolTip("Open XNAT tool");
+  this->setText(tr("&XNAT"));
+  this->setToolTip(tr("Open XNAT tool"));
 
   berry::IPreferencesService* prefService = berry::Platform::GetPreferencesService();
 

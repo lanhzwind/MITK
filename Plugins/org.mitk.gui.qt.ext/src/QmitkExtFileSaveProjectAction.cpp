@@ -55,8 +55,8 @@ QmitkExtFileSaveProjectAction::QmitkExtFileSaveProjectAction(berry::IWorkbenchWi
 void QmitkExtFileSaveProjectAction::Init(berry::IWorkbenchWindow* window)
 {
   m_Window = window;
-  this->setText("&Save Project...");
-  this->setToolTip("Save content of Data Manager as a .mitk project file");
+  this->setText(tr("&Save Project..."));
+  this->setToolTip(tr("Save content of Data Manager as a .mitk project file"));
 
   this->connect(this, SIGNAL(triggered(bool)), this, SLOT(Run()));
 }
@@ -84,9 +84,9 @@ void QmitkExtFileSaveProjectAction::Run()
 
       if (!dss)
       {
-        QString msg = "IDataStorageService service not available. Unable to open files.";
+        QString msg = tr("IDataStorageService service not available. Unable to open files.");
         MITK_WARN << msg.toStdString();
-        QMessageBox::warning(QApplication::activeWindow(), "Unable to open files", msg);
+        QMessageBox::warning(QApplication::activeWindow(), tr("Unable to open files"), msg);
         return;
       }
 
@@ -97,11 +97,11 @@ void QmitkExtFileSaveProjectAction::Run()
 
     mitk::DataStorage::Pointer storage = dsRef->GetDataStorage();
 
-    QString dialogTitle = "Save MITK Scene (%1)";
+    QString dialogTitle = tr("Save MITK Scene")+QString(" (%1)").arg(dsRef->GetLabel());
     QString fileName = QFileDialog::getSaveFileName(NULL,
-                                                    dialogTitle.arg(dsRef->GetLabel()),
+                                                    dialogTitle,
                                                     m_LastPath,
-                                                    "MITK scene files (*.mitk)",
+                                                    tr("MITK scene files (*.mitk)"),
                                                     NULL );
 
     if (fileName.isEmpty() )
@@ -125,8 +125,8 @@ void QmitkExtFileSaveProjectAction::Run()
     if ( !sceneIO->SaveScene( nodesToBeSaved, storage, fileName.toStdString() ) )
     {
       QMessageBox::information(NULL,
-                               "Scene saving",
-                               "Scene could not be written completely. Please check the log.",
+                               tr("Scene saving"),
+                               tr("Scene could not be written completely. Please check the log."),
                                QMessageBox::Ok);
 
     }
@@ -136,7 +136,7 @@ void QmitkExtFileSaveProjectAction::Run()
     if (!failedNodes->empty())
     {
       std::stringstream ss;
-      ss << "The following nodes could not be serialized:" << std::endl;
+      ss << tr("The following nodes could not be serialized:").toStdString() << std::endl;
       for ( mitk::SceneIO::FailedBaseDataListType::const_iterator iter = failedNodes->begin();
         iter != failedNodes->end();
         ++iter )
@@ -148,10 +148,10 @@ void QmitkExtFileSaveProjectAction::Run()
         }
         else
         {
-          ss << "(NULL)";
+          ss << tr("(NULL)").toStdString();
         }
 
-        ss << " contained in node '" << (*iter)->GetName() << "'" << std::endl;
+        ss << tr(" contained in node ").toStdString() << "'" << (*iter)->GetName() << "'" << std::endl;
       }
 
       MITK_WARN << ss.str();
@@ -161,13 +161,13 @@ void QmitkExtFileSaveProjectAction::Run()
     if (!failedProperties->GetMap()->empty())
     {
       std::stringstream ss;
-      ss << "The following properties could not be serialized:" << std::endl;
+      ss << tr("The following properties could not be serialized:").toStdString() << std::endl;
       const mitk::PropertyList::PropertyMap* propmap = failedProperties->GetMap();
       for ( mitk::PropertyList::PropertyMap::const_iterator iter = propmap->begin();
         iter != propmap->end();
         ++iter )
       {
-        ss << " - " << iter->second->GetNameOfClass() << " associated to key '" << iter->first << "'" << std::endl;
+        ss << " - " << iter->second->GetNameOfClass() << tr(" associated to key ").toStdString() << "'" << iter->first << "'" << std::endl;
       }
 
       MITK_WARN << ss.str();
@@ -175,6 +175,6 @@ void QmitkExtFileSaveProjectAction::Run()
   }
   catch (std::exception& e)
   {
-    MITK_ERROR << "Exception caught during scene saving: " << e.what();
+    MITK_ERROR << tr("Exception caught during scene saving: ").toStdString() << e.what();
   }
 }

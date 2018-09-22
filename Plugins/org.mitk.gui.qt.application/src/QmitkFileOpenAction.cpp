@@ -25,6 +25,7 @@ See LICENSE.txt or http://www.mitk.org for details.
 #include <berryIPreferences.h>
 
 #include <QFileDialog>
+#include <QApplication>
 
 class QmitkFileOpenActionPrivate
 {
@@ -33,8 +34,8 @@ public:
   void init ( berry::IWorkbenchWindow* window, QmitkFileOpenAction* action )
   {
     m_Window = window;
-    action->setText("&Open File...");
-    action->setToolTip("Open data files (images, surfaces,...)");
+    action->setText(QApplication::translate("QmitkFileOpenAction","&Open File..."));
+    action->setToolTip(QApplication::translate("QmitkFileOpenAction","Open data files (images, surfaces,...)"));
 
     QObject::connect(action, SIGNAL(triggered(bool)), action, SLOT(Run()));
   }
@@ -110,7 +111,7 @@ void QmitkFileOpenAction::Run()
 {
 
   // Ask the user for a list of files to open
-  QStringList fileNames = QFileDialog::getOpenFileNames(NULL, "Open",
+  QStringList fileNames = QFileDialog::getOpenFileNames(NULL, tr("Open"),
                                                         d->getLastFileOpenPath(),
                                                         QmitkIOUtil::GetFileOpenFilterString());
 

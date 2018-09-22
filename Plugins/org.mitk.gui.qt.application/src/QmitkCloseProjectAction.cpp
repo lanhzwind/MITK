@@ -62,8 +62,8 @@ QmitkCloseProjectAction::QmitkCloseProjectAction(const QIcon& icon, berry::IWork
 void QmitkCloseProjectAction::init(berry::IWorkbenchWindow* window)
 {
   m_Window = window;
-  this->setText("&Close Project...");
-  this->setToolTip("Close Project will remove all data objects from the application. This will free up the memory that is used by the data.");
+  this->setText(tr("&Close Project..."));
+  this->setToolTip(tr("Close Project will remove all data objects from the application. This will free up the memory that is used by the data."));
   this->connect(this, SIGNAL(triggered(bool)), this, SLOT(Run()));
 }
 
@@ -81,7 +81,7 @@ void QmitkCloseProjectAction::Run()
 
     if (!dss)
     {
-      MITK_WARN << "IDataStorageService service not available. Unable to close project.";
+      MITK_WARN << tr("IDataStorageService service not available. Unable to close project.").toStdString();
       context->ungetService(dsRef);
       return;
     }
@@ -96,7 +96,7 @@ void QmitkCloseProjectAction::Run()
     mitk::DataStorage::Pointer dataStorage = dataStorageRef->GetDataStorage();
     if (dataStorage.IsNull())
     {
-      MITK_WARN << "No data storage available. Cannot close project.";
+      MITK_WARN << tr("No data storage available. Cannot close project.").toStdString();
       return;
     }
 
@@ -108,8 +108,8 @@ void QmitkCloseProjectAction::Run()
     }
 
     /* Ask, if the user is sure about that */
-    QString msg = "Are you sure that you want to close the current project (%1)?\nThis will remove all data objects.";
-    if (QMessageBox::question(NULL, "Remove all data?", msg.arg(dataStorageRef->GetLabel()),
+    QString msg = tr("Are you sure that you want to close the current project (%1)?\nThis will remove all data objects.");
+    if (QMessageBox::question(NULL, tr("Remove all data?"), msg.arg(dataStorageRef->GetLabel()),
                               QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)
     {
       return;
@@ -135,7 +135,7 @@ void QmitkCloseProjectAction::Run()
   }
   catch (std::exception& e)
   {
-    MITK_ERROR << "Exception caught during closing project: " << e.what();
-    QMessageBox::warning(NULL, "Error", QString("An error occurred during Close Project: %1").arg(e.what()));
+    MITK_ERROR << tr("Exception caught during closing project: ").toStdString() << e.what();
+    QMessageBox::warning(NULL, tr("Error"), tr("An error occurred during Close Project:")+QString("%1").arg(e.what()));
   }
 }

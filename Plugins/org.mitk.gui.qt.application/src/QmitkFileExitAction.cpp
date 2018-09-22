@@ -52,8 +52,8 @@ QmitkFileExitAction::QmitkFileExitAction(const QIcon& icon, berry::IWorkbenchWin
 void QmitkFileExitAction::init(berry::IWorkbenchWindow* window)
 {
   m_Window = window;
-  this->setText("&Exit");
-  this->setToolTip("Exit the application. Please save your data before exiting.");
+  this->setText(tr("&Exit"));
+  this->setToolTip(tr("Exit the application. Please save your data before exiting."));
   this->connect(this, SIGNAL(triggered(bool)), this, SLOT(Run()));
 }
 

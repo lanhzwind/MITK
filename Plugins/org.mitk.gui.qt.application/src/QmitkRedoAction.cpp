@@ -25,6 +25,8 @@ See LICENSE.txt or http://www.mitk.org for details.
 
 #include <berryIPreferences.h>
 
+#include <QApplication>
+
 class QmitkRedoActionPrivate
 {
 public:
@@ -32,8 +34,8 @@ public:
   void init ( berry::IWorkbenchWindow* window, QmitkRedoAction* action )
   {
     m_Window = window;
-    action->setText("&Redo");
-    action->setToolTip("execute the last action that was undone again (not supported by all modules)");
+    action->setText(QApplication::translate("QmitkRedoAction","&Redo"));
+    action->setToolTip(QApplication::translate("QmitkRedoAction","execute the last action that was undone again (not supported by all modules)"));
 
     QObject::connect(action, SIGNAL(triggered(bool)), action, SLOT(Run()));
   }
@@ -76,13 +78,13 @@ void QmitkRedoAction::Run()
         verboseundo->GetRedoDescriptions();
       if (descriptions.size() >= 1)
       {
-        MITK_INFO << "Redo " << descriptions.front().second;
+        MITK_INFO << tr("Redo ").toStdString() << descriptions.front().second;
       }
     }
     model->Redo();
   }
   else
   {
-    MITK_ERROR << "No undo model instantiated";
+    MITK_ERROR << tr("No undo model instantiated").toStdString();
   }
 }

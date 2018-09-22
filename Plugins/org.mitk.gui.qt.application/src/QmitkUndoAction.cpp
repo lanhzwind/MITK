@@ -25,6 +25,8 @@ See LICENSE.txt or http://www.mitk.org for details.
 
 #include <berryIPreferences.h>
 
+#include <QApplication>
+
 class QmitkUndoActionPrivate
 {
 public:
@@ -32,8 +34,8 @@ public:
   void init ( berry::IWorkbenchWindow* window, QmitkUndoAction* action )
   {
     m_Window = window;
-    action->setText("&Undo");
-    action->setToolTip("Undo the last action (not supported by all modules)");
+    action->setText(QApplication::translate("QmitkUndoAction","&Undo"));
+    action->setToolTip(QApplication::translate("QmitkUndoAction","Undo the last action (not supported by all modules)"));
 
     QObject::connect(action, SIGNAL(triggered(bool)), action, SLOT(Run()));
   }
@@ -76,13 +78,13 @@ void QmitkUndoAction::Run()
         verboseundo->GetUndoDescriptions();
       if (descriptions.size() >= 1)
       {
-        MITK_INFO << "Undo " << descriptions.front().second;
+        MITK_INFO << tr("Undo ").toStdString() << descriptions.front().second;
       }
     }
     model->Undo();
   }
   else
   {
-    MITK_ERROR << "No undo model instantiated";
+    MITK_ERROR << tr("No undo model instantiated").toStdString();
   }
 }

@@ -57,8 +57,8 @@ void QmitkOpenDicomEditorAction::init(berry::IWorkbenchWindow::Pointer window)
 {
   m_Window = window;
   this->setParent(static_cast<QWidget*>(m_Window->GetShell()->GetControl()));
-  this->setText("&DICOM");
-  this->setToolTip("Open dicom tool");
+  this->setText(tr("&DICOM"));
+  this->setToolTip(tr("Open dicom tool"));
 
   berry::IPreferencesService* prefService = berry::Platform::GetPreferencesService();
 
