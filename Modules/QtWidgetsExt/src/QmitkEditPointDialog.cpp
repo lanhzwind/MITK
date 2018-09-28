@@ -37,7 +37,7 @@ static bool ValidateCoordinate(const QString& name, double value)
 {
   auto hasValidPrecision = ValidatePrecision(value);
   if (!hasValidPrecision)
-    EmitWarning(QString("Point set %1 coordinate is outside double precision range.").arg(name), "Invalid point set input");
+    EmitWarning(QmitkEditPointDialog::tr("Point set %1 coordinate is outside double precision range.").arg(name), QmitkEditPointDialog::tr("Invalid point set input"));
 
   return hasValidPrecision;
 }
@@ -56,13 +56,13 @@ QmitkEditPointDialog::QmitkEditPointDialog( QWidget * parent, Qt::WindowFlags f)
 : QDialog(parent, f)
 , d(new QmitkEditPointDialogData)
 {
-  this->setWindowTitle("Edit Point Dialog");
+  this->setWindowTitle(tr("Edit Point Dialog"));
   d->m_PointSet = nullptr;
   d->m_Timestep = 0;
   d->m_XCoord = new QLineEdit;
   d->m_YCoord = new QLineEdit;
   d->m_ZCoord = new QLineEdit;
-  QPushButton* _OKButton = new QPushButton("OK");
+  QPushButton* _OKButton = new QPushButton(tr("OK"));
   connect( _OKButton, SIGNAL(clicked(bool)), this, SLOT(OnOkButtonClicked(bool)) );
 
   auto  layout = new QGridLayout;
@@ -98,7 +98,7 @@ void QmitkEditPointDialog::OnOkButtonClicked(bool)
 {
   if(d->m_PointSet == nullptr)
   {
-    MITK_WARN << "Pointset is 0.";
+    MITK_WARN << tr("Pointset is 0.").toStdString();
     this->reject();
   }
   // check if digits of input value exceed double precision

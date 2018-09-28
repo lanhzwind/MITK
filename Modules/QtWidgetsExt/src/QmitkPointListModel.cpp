@@ -200,11 +200,11 @@ QVariant QmitkPointListModel::headerData(int section, Qt::Orientation orientatio
 
   if (orientation == Qt::Horizontal)
   {
-    return QString("Coordinates").arg(section);
+    return tr("Coordinates").arg(section);
   }
   else
   {
-    return QString("Row %1").arg(section);
+    return tr("Row %1").arg(section);
   }
 }
 

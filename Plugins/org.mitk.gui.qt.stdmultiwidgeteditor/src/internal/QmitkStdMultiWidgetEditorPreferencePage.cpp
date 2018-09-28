@@ -168,7 +168,7 @@ void QmitkStdMultiWidgetEditorPreferencePage::ColorChooserButtonClicked()
   unsigned int widgetIndex = m_Ui->m_RenderWindowChooser->currentIndex();
   if(widgetIndex > 3)
   {
-    MITK_ERROR << "Selected index for unknown.";
+    MITK_ERROR << tr("Selected index for unknown.").toStdString();
     return;
   }
   QObject *senderObj = sender(); // This will give Sender button
@@ -228,7 +228,7 @@ void QmitkStdMultiWidgetEditorPreferencePage::AnnotationTextChanged(QString text
   unsigned int widgetIndex = m_Ui->m_RenderWindowChooser->currentIndex();
   if( widgetIndex > 3)
   {
-    MITK_INFO << "Selected index for unknown widget.";
+    MITK_INFO << tr("Selected index for unknown widget.").toStdString();
     return;
   }
   m_WidgetAnnotation[widgetIndex] = text;
@@ -244,7 +244,7 @@ void QmitkStdMultiWidgetEditorPreferencePage::OnWidgetComboBoxChanged(int i)
 {
   if( i > 3)
   {
-    MITK_ERROR << "Selected unknown widget.";
+    MITK_ERROR << tr("Selected unknown widget.").toStdString();
     return;
   }
   QColor widgetColor(m_WidgetDecorationColor[i]);

@@ -255,7 +255,7 @@ QmitkInvalidAnyWidget::QmitkInvalidAnyWidget(const std::string& name, const us::
   : QLabel(parent)
   , QmitkAnyAdapter(name)
 {
-  this->setText(QString("Unknown option type '%1'").arg(any.Type().name()));
+  this->setText(tr("Unknown option type '%1'").arg(any.Type().name()));
 }
 
 us::Any QmitkInvalidAnyWidget::GetAny() const

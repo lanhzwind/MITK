@@ -62,11 +62,11 @@ QmitkFileWriterOptionsDialog::QmitkFileWriterOptionsDialog(mitk::IOUtil::SaveInf
   {
     ui->m_WriterLabel->setVisible(false);
     ui->m_WriterComboBox->setVisible(false);
-    ui->m_FilePathLabel->setText(QString("File: %1").arg(QString::fromStdString(saveInfo.m_Path)));
+    ui->m_FilePathLabel->setText(tr("File: %1").arg(QString::fromStdString(saveInfo.m_Path)));
   }
   else
   {
-    ui->m_FilePathLabel->setText(QString("for %1").arg(QString::fromStdString(saveInfo.m_Path)));
+    ui->m_FilePathLabel->setText(tr("for %1").arg(QString::fromStdString(saveInfo.m_Path)));
   }
 
   this->setWindowTitle("File writing options");

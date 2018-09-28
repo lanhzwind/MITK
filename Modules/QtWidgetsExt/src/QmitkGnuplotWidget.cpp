@@ -43,10 +43,10 @@ QmitkGnuplotWidget::~QmitkGnuplotWidget()
 
 void QmitkGnuplotWidget::CreateContextMenu()
 {
-  m_CopyPlotAction = new QAction("Copy &Plot", this);
+  m_CopyPlotAction = new QAction(tr("Copy &Plot"), this);
   connect(m_CopyPlotAction, SIGNAL(triggered()), this, SLOT(OnCopyPlot()));
 
-  m_CopyScriptAction = new QAction("Copy &Script", this);
+  m_CopyScriptAction = new QAction(tr("Copy &Script"), this);
   connect(m_CopyScriptAction, SIGNAL(triggered()), this, SLOT(OnCopyScript()));
 
   m_ContextMenu = new QMenu(this);

@@ -45,7 +45,8 @@ QmitkHotkeyLineEdit::QmitkHotkeyLineEdit( const QString& _QKeySequenceAsString, 
 
 void QmitkHotkeyLineEdit::Init()
 {
-  this->setToolTip(QString::fromStdString(QmitkHotkeyLineEdit::TOOLTIP));
+  // this->setToolTip(QString::fromStdString(QmitkHotkeyLineEdit::TOOLTIP));
+  this->setToolTip(tr("Press any key (combination)"));
   this->setReadOnly(true);
   connect( this, SIGNAL( textChanged(const QString &) ), this,
            SLOT( LineEditTextChanged(const QString &) ) );

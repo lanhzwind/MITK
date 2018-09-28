@@ -75,7 +75,7 @@ void QmitkPropertiesTableEditor::init()
   QVBoxLayout* _NodePropertiesLayout = new QVBoxLayout;
   QWidget* _PropertyFilterKeyWordPane = new QWidget(QWidget::parentWidget());
   QHBoxLayout* _PropertyFilterKeyWordLayout = new QHBoxLayout;
-  QLabel* _LabelPropertyFilterKeyWord = new QLabel("Filter: ",_PropertyFilterKeyWordPane);
+  QLabel* _LabelPropertyFilterKeyWord = new QLabel(tr("Filter: "),_PropertyFilterKeyWordPane);
   m_TxtPropertyFilterKeyWord = new QLineEdit(_PropertyFilterKeyWordPane);
   m_NodePropertiesTableView = new QTableView(QWidget::parentWidget());
 

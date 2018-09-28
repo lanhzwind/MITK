@@ -417,7 +417,7 @@ void QmitkDataStorageTreeModel::SetDataStorage( mitk::DataStorage* _DataStorage 
     if(m_Root)
       m_Root->Delete();
     mitk::DataNode::Pointer rootDataNode = mitk::DataNode::New();
-    rootDataNode->SetName("Data Manager");
+    rootDataNode->SetName(tr("Data Manager").toStdString());
     m_Root = new TreeItem(rootDataNode, 0);
     this->beginResetModel();
     this->endResetModel();

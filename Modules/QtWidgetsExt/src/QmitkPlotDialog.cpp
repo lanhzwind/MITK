@@ -23,7 +23,7 @@ QmitkPlotDialog::QmitkPlotDialog(const char* title, QWidget* parent, const char*
 {
   auto  boxLayout = new QVBoxLayout(this);
   m_Plot = new QmitkPlotWidget( this, title ) ;
-  m_CloseDialogButton = new QPushButton("close plot window", this);
+  m_CloseDialogButton = new QPushButton(tr("close plot window"), this);
   boxLayout->addWidget( m_Plot );
   boxLayout->addWidget( m_CloseDialogButton );
   connect( m_CloseDialogButton, SIGNAL( clicked( ) ), this, SLOT( accept() ) );

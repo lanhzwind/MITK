@@ -94,20 +94,20 @@ void QmitkTransferFunctionGeneratorWidget::OnSavePreset( )
 
   mitk::TransferFunction::Pointer tf = tfpToChange->GetValue();
 
-  presetFileName = QFileDialog::getSaveFileName( this,"Choose a filename to save the transfer function", presetFileName, "Transferfunction (*.xml)" );
+  presetFileName = QFileDialog::getSaveFileName( this,tr("Choose a filename to save the transfer function"), presetFileName, tr("Transferfunction (*.xml)") );
 
   if( !presetFileName.endsWith(".xml") )
      presetFileName.append(".xml");
 
-  MITK_INFO << "Saving Transferfunction under path: " << presetFileName.toStdString();
+  MITK_INFO << tr("Saving Transferfunction under path: ").toStdString() << presetFileName.toStdString();
 
   if ( mitk::TransferFunctionPropertySerializer::SerializeTransferFunction( presetFileName.toLatin1(),  tf ))
   {
     QFontMetrics metrics(m_InfoPreset->font());
     QString text = metrics.elidedText(presetFileName, Qt::ElideMiddle, m_InfoPreset->width());
-    m_InfoPreset->setText( QString("saved ") + text);
+    m_InfoPreset->setText( tr("saved ") + text);
   } else {
-    m_InfoPreset->setText( QString("saving failed") );
+    m_InfoPreset->setText( tr("saving failed") );
   }
 }
 
@@ -117,9 +117,9 @@ void QmitkTransferFunctionGeneratorWidget::OnLoadPreset( )
   if(tfpToChange.IsNull())
     return;
 
-  presetFileName = QFileDialog::getOpenFileName( this,"Choose a file to open the transfer function from",presetFileName, "Transferfunction (*.xml)"  );
+  presetFileName = QFileDialog::getOpenFileName( this,tr("Choose a file to open the transfer function from"),presetFileName, tr("Transferfunction (*.xml)")  );
 
-  MITK_INFO << "Loading Transferfunction from path: " << presetFileName.toStdString();
+  MITK_INFO << tr("Loading Transferfunction from path: ").toStdString() << presetFileName.toStdString();
 
   mitk::TransferFunction::Pointer tf = mitk::TransferFunctionPropertySerializer::DeserializeTransferFunction(presetFileName.toLatin1());
 
@@ -129,7 +129,7 @@ void QmitkTransferFunctionGeneratorWidget::OnLoadPreset( )
 
     QFontMetrics metrics(m_InfoPreset->font());
     QString text = metrics.elidedText(presetFileName, Qt::ElideMiddle, m_InfoPreset->width());
-    m_InfoPreset->setText( QString("loaded ") + text);
+    m_InfoPreset->setText( tr("loaded ") + text);
 
     mitk::RenderingManager::GetInstance()->RequestUpdateAll();
     emit SignalUpdateCanvas();
@@ -142,7 +142,7 @@ void QmitkTransferFunctionGeneratorWidget::OnPreset(int mode)
   if( --mode == -1 )
     return;
 
-  m_InfoPreset->setText(QString("selected ") + m_TransferFunctionComboBox->currentText());
+  m_InfoPreset->setText(tr("selected ") + m_TransferFunctionComboBox->currentText());
 
   //revert to first item
   m_TransferFunctionComboBox->setCurrentIndex( 0 );
@@ -198,10 +198,10 @@ void QmitkTransferFunctionGeneratorWidget::OnDeltaLevelWindow(int dx, int dy) //
 
   std::stringstream ss;
 
-  ss << "Click on the cross and move the mouse"<<"\n"
+  ss << tr("Click on the cross and move the mouse").toStdString() <<"\n"
      <<"\n"
-     << "center at " << thPos << "\n"
-     << "width " << thDelta * 2;
+     << tr("center at ").toStdString() << thPos << "\n"
+     << tr("width ").toStdString() << thDelta * 2;
 
   m_InfoLevelWindow->setText( QString( ss.str().c_str() ) );
 
@@ -271,10 +271,10 @@ void QmitkTransferFunctionGeneratorWidget::OnDeltaThreshold(int dx, int dy) // L
 
   std::stringstream ss;
 
-  ss << "Click on the cross and move the mouse"<<"\n"
+  ss << tr("Click on the cross and move the mouse").toStdString() <<"\n"
      <<"\n"
-     << "threshold at " << thPos << "\n"
-     << "width " << thDelta * 2;
+     << tr("threshold at ").toStdString() << thPos << "\n"
+     << tr("width ").toStdString() << thDelta * 2;
 
   m_InfoThreshold->setText( QString( ss.str().c_str() ) );
 
@@ -344,7 +344,7 @@ void QmitkTransferFunctionGeneratorWidget::SetDataNode(mitk::DataNode* node)
     }
     else
     {
-      MITK_WARN << "QmitkTransferFunctonGeneratorWidget does not support " << node->GetData()->GetNameOfClass() << " instances";
+      MITK_WARN << tr("QmitkTransferFunctonGeneratorWidget does not support ").toStdString() << node->GetData()->GetNameOfClass() << tr(" instances").toStdString();
     }
 
     thPos = ( histoMinimum + histoMaximum ) / 2.0;

@@ -50,8 +50,8 @@ void QmitkLevelWindowRangeChangeDialog::inputValidator()
 {
   if (!(rangeMinDoubleSpinBox->value() < rangeMaxDoubleSpinBox->value()))
   {
-    QMessageBox::critical( this, "Change Range",
-    "Upper limit has to be greater than lower limit.\n"
+    QMessageBox::critical( this, tr("Change Range"),
+    tr("Upper limit has to be greater than lower limit.\n"
     "Please enter limits again." );
   }
   else

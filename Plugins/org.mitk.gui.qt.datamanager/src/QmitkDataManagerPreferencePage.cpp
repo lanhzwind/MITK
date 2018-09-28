@@ -52,13 +52,13 @@ void QmitkDataManagerPreferencePage::CreateQtControl(QWidget* parent)
   m_UseSurfaceDecimation = new QCheckBox;
 
   auto  formLayout = new QFormLayout;
-  formLayout->addRow("&Single click property editing:", m_EnableSingleEditing);
-  formLayout->addRow("&Place new nodes on top:", m_PlaceNewNodesOnTop);
-  formLayout->addRow("&Show helper objects:", m_ShowHelperObjects);
-  formLayout->addRow("&Show nodes containing no data", m_ShowNodesContainingNoData);
-  formLayout->addRow("&Call global reinit if node is deleted", m_GlobalReinitOnNodeDelete);
-  formLayout->addRow("&Call global reinit if node is added", m_GlobalReinitOnNodeAdded);
-  formLayout->addRow("&Use surface decimation:", m_UseSurfaceDecimation);
+  formLayout->addRow(tr("&Single click property editing:"), m_EnableSingleEditing);
+  formLayout->addRow(tr("&Place new nodes on top:"), m_PlaceNewNodesOnTop);
+  formLayout->addRow(tr("&Show helper objects:"), m_ShowHelperObjects);
+  formLayout->addRow(tr("&Show nodes containing no data"), m_ShowNodesContainingNoData);
+  formLayout->addRow(tr("&Call global reinit if node is deleted"), m_GlobalReinitOnNodeDelete);
+  formLayout->addRow(tr("&Call global reinit if node is added"), m_GlobalReinitOnNodeAdded);
+  formLayout->addRow(tr("&Use surface decimation:"), m_UseSurfaceDecimation);
 
   m_MainControl->setLayout(formLayout);
   this->Update();

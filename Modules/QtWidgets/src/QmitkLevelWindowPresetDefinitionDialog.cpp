@@ -78,15 +78,15 @@ void QmitkLevelWindowPresetDefinitionDialog::addPreset()
   std::string name(presetnameLineEdit->text().toStdString());
   if (m_TableModel->contains(name))
   {
-    QMessageBox::critical( this, "Preset definition",
-    "Presetname already exists.\n"
-    "You have to enter another one." );
+    QMessageBox::critical( this, tr("Preset definition"),
+    tr("Presetname already exists.\n"
+    "You have to enter another one.") );
   }
   else if (presetnameLineEdit->text() == "")
   {
-    QMessageBox::critical( this, "Preset definition",
-    "Presetname has to be set.\n"
-    "You have to enter a Presetname." );
+    QMessageBox::critical( this, tr("Preset definition"),
+    tr("Presetname has to be set.\n"
+    "You have to enter a Presetname.") );
   }
   else
   {
@@ -111,17 +111,17 @@ void QmitkLevelWindowPresetDefinitionDialog::changePreset()
     std::string name(presetnameLineEdit->text().toStdString());
     if (name == "")
     {
-      QMessageBox::critical( this, "Preset definition",
-      "Presetname has to be set.\n"
-      "You have to enter a Presetname." );
+      QMessageBox::critical( this, tr("Preset definition"),
+      tr("Presetname has to be set.\n"
+      "You have to enter a Presetname.") );
     }
     else if (m_TableModel->contains(name)
         && (m_TableModel->getPreset(presetView->selectionModel()->currentIndex()).name
             != name))
     {
-      QMessageBox::critical( this, "Preset definition",
-      "Presetname already exists.\n"
-      "You have to enter another one." );
+      QMessageBox::critical( this, tr("Preset definition"),
+      tr("Presetname already exists.\n"
+      "You have to enter another one.") );
     }
     else
     {
@@ -320,9 +320,9 @@ PresetTableModel::headerData(int section, Qt::Orientation orientation, int role)
   if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
   {
     switch (section) {
-    case 0: return QVariant("Preset");
-    case 1: return QVariant("Level");
-    case 2: return QVariant("Window");
+    case 0: return tr("Preset");
+    case 1: return tr("Level");
+    case 2: return tr("Window");
     }
   }
 

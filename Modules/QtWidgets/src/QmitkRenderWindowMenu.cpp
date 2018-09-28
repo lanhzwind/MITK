@@ -164,40 +164,40 @@ void QmitkRenderWindowMenu::CreateSettingsWidget()
 {
   m_Settings = new QMenu(this);
 
-  m_DefaultLayoutAction = new QAction( "standard layout", m_Settings );
+  m_DefaultLayoutAction = new QAction( tr("Standard layout"), m_Settings );
   m_DefaultLayoutAction->setDisabled( true );
 
-  m_2DImagesUpLayoutAction = new QAction( "2D images top, 3D bottom", m_Settings );
+  m_2DImagesUpLayoutAction = new QAction( tr("2D images top, 3D bottom"), m_Settings );
   m_2DImagesUpLayoutAction->setDisabled( false );
 
-  m_2DImagesLeftLayoutAction = new QAction( "2D images left, 3D right", m_Settings );
+  m_2DImagesLeftLayoutAction = new QAction( tr("2D images left, 3D right"), m_Settings );
   m_2DImagesLeftLayoutAction->setDisabled( false );
 
-  m_Big3DLayoutAction = new QAction( "Big 3D", m_Settings );
+  m_Big3DLayoutAction = new QAction( tr("Big 3D"), m_Settings );
   m_Big3DLayoutAction->setDisabled( false );
 
-  m_Widget1LayoutAction = new QAction( "Axial plane", m_Settings );
+  m_Widget1LayoutAction = new QAction( tr("Axial plane"), m_Settings );
   m_Widget1LayoutAction->setDisabled( false );
 
-  m_Widget2LayoutAction = new QAction( "Sagittal plane", m_Settings );
+  m_Widget2LayoutAction = new QAction( tr("Sagittal plane"), m_Settings );
   m_Widget2LayoutAction->setDisabled( false );
 
-  m_Widget3LayoutAction = new QAction( "Coronal plane", m_Settings );
+  m_Widget3LayoutAction = new QAction( tr("Coronal plane"), m_Settings );
   m_Widget3LayoutAction->setDisabled( false );
 
-  m_RowWidget3And4LayoutAction = new QAction( "Coronal top, 3D bottom", m_Settings );
+  m_RowWidget3And4LayoutAction = new QAction( tr("Coronal top, 3D bottom"), m_Settings );
   m_RowWidget3And4LayoutAction->setDisabled( false );
 
-  m_ColumnWidget3And4LayoutAction = new QAction( "Coronal left, 3D right", m_Settings );
+  m_ColumnWidget3And4LayoutAction = new QAction( tr("Coronal left, 3D right"), m_Settings );
   m_ColumnWidget3And4LayoutAction->setDisabled( false );
 
-  m_SmallUpperWidget2Big3and4LayoutAction = new QAction( "Sagittal top, Coronal n 3D bottom", m_Settings );
+  m_SmallUpperWidget2Big3and4LayoutAction = new QAction( tr("Sagittal top, Coronal n 3D bottom"), m_Settings );
   m_SmallUpperWidget2Big3and4LayoutAction->setDisabled( false );
 
-  m_2x2Dand3DWidgetLayoutAction = new QAction( "Axial n Sagittal left, 3D right", m_Settings );
+  m_2x2Dand3DWidgetLayoutAction = new QAction( tr("Axial n Sagittal left, 3D right"), m_Settings );
   m_2x2Dand3DWidgetLayoutAction->setDisabled( false );
 
-  m_Left2Dand3DRight2DLayoutAction = new QAction( "Axial n 3D left, Sagittal right", m_Settings );
+  m_Left2Dand3DRight2DLayoutAction = new QAction( tr("Axial n 3D left, Sagittal right"), m_Settings );
   m_Left2Dand3DRight2DLayoutAction->setDisabled( false );
 
   m_Settings->addAction(m_DefaultLayoutAction);
@@ -825,7 +825,7 @@ void QmitkRenderWindowMenu::OnCrossHairMenuAboutToShow()
   crosshairModesMenu->clear();
 
   QAction* resetViewAction = new QAction(crosshairModesMenu);
-  resetViewAction->setText("Reset view");
+  resetViewAction->setText(tr("Reset view"));
   crosshairModesMenu->addAction( resetViewAction );
   connect( resetViewAction, SIGNAL(triggered()), this, SIGNAL(ResetView()));
 
@@ -847,7 +847,7 @@ void QmitkRenderWindowMenu::OnCrossHairMenuAboutToShow()
 
 
     QAction* showHideCrosshairVisibilityAction = new QAction(crosshairModesMenu);
-    showHideCrosshairVisibilityAction->setText("Show crosshair");
+    showHideCrosshairVisibilityAction->setText(tr("Show crosshair"));
     showHideCrosshairVisibilityAction->setCheckable(true);
     showHideCrosshairVisibilityAction->setChecked(currentState);
     crosshairModesMenu->addAction( showHideCrosshairVisibilityAction );
@@ -858,7 +858,7 @@ void QmitkRenderWindowMenu::OnCrossHairMenuAboutToShow()
   {
     QAction* rotationGroupSeparator = new QAction(crosshairModesMenu);
     rotationGroupSeparator->setSeparator(true);
-    rotationGroupSeparator->setText("Rotation mode");
+    rotationGroupSeparator->setText(tr("Rotation mode"));
     crosshairModesMenu->addAction( rotationGroupSeparator );
 
     QActionGroup* rotationModeActionGroup = new QActionGroup(crosshairModesMenu);
@@ -866,7 +866,7 @@ void QmitkRenderWindowMenu::OnCrossHairMenuAboutToShow()
 
     QAction* noCrosshairRotation = new QAction(crosshairModesMenu);
     noCrosshairRotation->setActionGroup(rotationModeActionGroup);
-    noCrosshairRotation->setText("No crosshair rotation");
+    noCrosshairRotation->setText(tr("No crosshair rotation"));
     noCrosshairRotation->setCheckable(true);
     noCrosshairRotation->setChecked(currentCrosshairRotationMode==0);
     noCrosshairRotation->setData( 0 );
@@ -874,7 +874,7 @@ void QmitkRenderWindowMenu::OnCrossHairMenuAboutToShow()
 
     QAction* singleCrosshairRotation = new QAction(crosshairModesMenu);
     singleCrosshairRotation->setActionGroup(rotationModeActionGroup);
-    singleCrosshairRotation->setText("Crosshair rotation");
+    singleCrosshairRotation->setText(tr("Crosshair rotation"));
     singleCrosshairRotation->setCheckable(true);
     singleCrosshairRotation->setChecked(currentCrosshairRotationMode==1);
     singleCrosshairRotation->setData( 1  );
@@ -882,7 +882,7 @@ void QmitkRenderWindowMenu::OnCrossHairMenuAboutToShow()
 
     QAction* coupledCrosshairRotation = new QAction(crosshairModesMenu);
     coupledCrosshairRotation->setActionGroup(rotationModeActionGroup);
-    coupledCrosshairRotation->setText("Coupled crosshair rotation");
+    coupledCrosshairRotation->setText(tr("Coupled crosshair rotation"));
     coupledCrosshairRotation->setCheckable(true);
     coupledCrosshairRotation->setChecked(currentCrosshairRotationMode==2);
     coupledCrosshairRotation->setData( 2 );
@@ -890,7 +890,7 @@ void QmitkRenderWindowMenu::OnCrossHairMenuAboutToShow()
 
     QAction* swivelMode = new QAction(crosshairModesMenu);
     swivelMode->setActionGroup(rotationModeActionGroup);
-    swivelMode->setText("Swivel mode");
+    swivelMode->setText(tr("Swivel mode"));
     swivelMode->setCheckable(true);
     swivelMode->setChecked(currentCrosshairRotationMode==3);
     swivelMode->setData( 3 );
@@ -906,7 +906,7 @@ void QmitkRenderWindowMenu::OnCrossHairMenuAboutToShow()
     autoRotationGroupSeparator->setSeparator(true);
     crosshairModesMenu->addAction( autoRotationGroupSeparator );
 
-    QAction* autoRotationAction = crosshairModesMenu->addAction( "Auto Rotation" );
+    QAction* autoRotationAction = crosshairModesMenu->addAction( tr("Auto Rotation") );
     autoRotationAction->setCheckable(true);
     autoRotationAction->setChecked( m_AutoRotationTimer.isActive() );
     connect( autoRotationAction, SIGNAL(triggered()), this, SLOT(OnAutoRotationActionTriggered()) );
@@ -917,7 +917,7 @@ void QmitkRenderWindowMenu::OnCrossHairMenuAboutToShow()
   {
     QAction* thickSlicesGroupSeparator = new QAction(crosshairModesMenu);
     thickSlicesGroupSeparator->setSeparator(true);
-    thickSlicesGroupSeparator->setText("ThickSlices mode");
+    thickSlicesGroupSeparator->setText(tr("ThickSlices mode"));
     crosshairModesMenu->addAction( thickSlicesGroupSeparator );
 
     QActionGroup* thickSlicesActionGroup = new QActionGroup(crosshairModesMenu);
@@ -955,7 +955,7 @@ void QmitkRenderWindowMenu::OnCrossHairMenuAboutToShow()
 
     QHBoxLayout* _TSLayout = new QHBoxLayout;
     _TSLayout->setContentsMargins(4,4,4,4);
-    _TSLayout->addWidget(new QLabel("TS: "));
+    _TSLayout->addWidget(new QLabel(tr("TS: ")));
     _TSLayout->addWidget(m_TSSlider);
     _TSLayout->addWidget(m_TSLabel=new QLabel(QString::number(currentNum*2+1),this));
 

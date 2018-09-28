@@ -28,7 +28,7 @@ See LICENSE.txt or http://www.mitk.org for details.
 QmitkModulesDialog::QmitkModulesDialog(QWidget *parent, Qt::WindowFlags f) :
     QDialog(parent, f)
 {
-  this->setWindowTitle("MITK Modules");
+  this->setWindowTitle(tr("MITK Modules"));
 
   auto  layout = new QVBoxLayout();
   this->setLayout(layout);

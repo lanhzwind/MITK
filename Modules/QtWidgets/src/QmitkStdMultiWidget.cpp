@@ -284,10 +284,10 @@ void QmitkStdMultiWidget::InitializeWidget()
   mitkWidget4->GetSliceNavigationController()->SetDefaultViewDirection(
     mitk::SliceNavigationController::Original );
 
-  SetDecorationProperties("Axial", GetDecorationColor(0), 0);
-  SetDecorationProperties("Sagittal", GetDecorationColor(1), 1);
-  SetDecorationProperties("Coronal", GetDecorationColor(2), 2);
-  SetDecorationProperties("3D", GetDecorationColor(3), 3);
+  SetDecorationProperties(tr("Axial").toStdString(), GetDecorationColor(0), 0);
+  SetDecorationProperties(tr("Sagittal").toStdString(), GetDecorationColor(1), 1);
+  SetDecorationProperties(tr("Coronal").toStdString(), GetDecorationColor(2), 2);
+  SetDecorationProperties(tr("3D").toStdString(), GetDecorationColor(3), 3);
 
   //connect to the "time navigation controller": send time via sliceNavigationControllers
   m_TimeNavigationController->ConnectGeometryTimeEvent(
@@ -341,7 +341,7 @@ std::pair<mitk::Color, mitk::Color> QmitkStdMultiWidget::GetGradientColors(unsig
 {
   if(widgetNumber > 3)
   {
-    MITK_ERROR << "Decoration color for unknown widget!";
+    MITK_ERROR << tr("Decoration color for unknown widget!").toStdString();
     float black[3] = { 0.0f, 0.0f, 0.0f};
     return std::make_pair(mitk::Color(black), mitk::Color(black));
   }
@@ -401,7 +401,7 @@ mitk::Color QmitkStdMultiWidget::GetDecorationColor(unsigned int widgetNumber)
     return m_DecorationColorWidget4;
   }
   default:
-    MITK_ERROR << "Decoration color for unknown widget!";
+    MITK_ERROR << tr("Decoration color for unknown widget!").toStdString();
     float black[3] = { 0.0f, 0.0f, 0.0f};
     return mitk::Color(black);
   }
@@ -411,7 +411,7 @@ std::string QmitkStdMultiWidget::GetCornerAnnotationText(unsigned int widgetNumb
 {
   if(widgetNumber > 3)
   {
-    MITK_ERROR << "Decoration color for unknown widget!";
+    MITK_ERROR << tr("Decoration color for unknown widget!").toStdString();
     return std::string("");
   }
   return std::string(m_CornerAnnotations[widgetNumber]->GetText(0));
@@ -458,7 +458,7 @@ void QmitkStdMultiWidget::AddPlanesToDataStorage()
 
 void QmitkStdMultiWidget::changeLayoutTo2DImagesUp()
 {
-  SMW_INFO << "changing layout to 2D images up... " << std::endl;
+  SMW_INFO << tr("changing layout to 2D images up... ").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -541,7 +541,7 @@ void QmitkStdMultiWidget::changeLayoutTo2DImagesUp()
 
 void QmitkStdMultiWidget::changeLayoutTo2DImagesLeft()
 {
-  SMW_INFO << "changing layout to 2D images left... " << std::endl;
+  SMW_INFO << tr("changing layout to 2D images left... ").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -626,7 +626,7 @@ void QmitkStdMultiWidget::SetDecorationProperties( std::string text,
 {
   if( widgetNumber > 3)
   {
-    MITK_ERROR << "Unknown render window for annotation.";
+    MITK_ERROR << tr("Unknown render window for annotation.").toStdString();
     return;
   }
   vtkRenderer* renderer = this->GetRenderWindow(widgetNumber)->GetRenderer()->GetVtkRenderer();
@@ -672,7 +672,7 @@ QmitkRenderWindow* QmitkStdMultiWidget::GetRenderWindow(unsigned int number)
   case 3:
     return this->GetRenderWindow4();
   default:
-    MITK_ERROR << "Requested unknown render window";
+    MITK_ERROR << tr("Requested unknown render window").toStdString();
     break;
   }
   return NULL;
@@ -680,7 +680,7 @@ QmitkRenderWindow* QmitkStdMultiWidget::GetRenderWindow(unsigned int number)
 
 void QmitkStdMultiWidget::changeLayoutToDefault()
 {
-  SMW_INFO << "changing layout to default... " << std::endl;
+  SMW_INFO << tr("changing layout to default... ").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -757,7 +757,7 @@ void QmitkStdMultiWidget::changeLayoutToDefault()
 
 void QmitkStdMultiWidget::changeLayoutToBig3D()
 {
-  SMW_INFO << "changing layout to big 3D ..." << std::endl;
+  SMW_INFO << tr("changing layout to big 3D ...").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -823,7 +823,7 @@ void QmitkStdMultiWidget::changeLayoutToBig3D()
 
 void QmitkStdMultiWidget::changeLayoutToWidget1()
 {
-  SMW_INFO << "changing layout to big Widget1 ..." << std::endl;
+  SMW_INFO << tr("changing layout to big Widget1 ...").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -889,7 +889,7 @@ void QmitkStdMultiWidget::changeLayoutToWidget1()
 
 void QmitkStdMultiWidget::changeLayoutToWidget2()
 {
-  SMW_INFO << "changing layout to big Widget2 ..." << std::endl;
+  SMW_INFO << tr("changing layout to big Widget2 ...").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -955,7 +955,7 @@ void QmitkStdMultiWidget::changeLayoutToWidget2()
 
 void QmitkStdMultiWidget::changeLayoutToWidget3()
 {
-  SMW_INFO << "changing layout to big Widget3 ..." << std::endl;
+  SMW_INFO << tr("changing layout to big Widget3 ...").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -1021,7 +1021,7 @@ void QmitkStdMultiWidget::changeLayoutToWidget3()
 
 void QmitkStdMultiWidget::changeLayoutToRowWidget3And4()
 {
-  SMW_INFO << "changing layout to Widget3 and 4 in a Row..." << std::endl;
+  SMW_INFO << tr("changing layout to Widget3 and 4 in a Row...").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -1097,7 +1097,7 @@ void QmitkStdMultiWidget::changeLayoutToRowWidget3And4()
 
 void QmitkStdMultiWidget::changeLayoutToColumnWidget3And4()
 {
-  SMW_INFO << "changing layout to Widget3 and 4 in one Column..." << std::endl;
+  SMW_INFO << tr("changing layout to Widget3 and 4 in one Column...").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -1173,7 +1173,7 @@ void QmitkStdMultiWidget::changeLayoutToColumnWidget3And4()
 
 void QmitkStdMultiWidget::changeLayoutToRowWidgetSmall3andBig4()
 {
-  SMW_INFO << "changing layout to Widget3 and 4 in a Row..." << std::endl;
+  SMW_INFO << tr("changing layout to Widget3 and 4 in a Row...").toStdString() << std::endl;
 
   this->changeLayoutToRowWidget3And4();
 
@@ -1182,7 +1182,7 @@ void QmitkStdMultiWidget::changeLayoutToRowWidgetSmall3andBig4()
 
 void QmitkStdMultiWidget::changeLayoutToSmallUpperWidget2Big3and4()
 {
-  SMW_INFO << "changing layout to Widget3 and 4 in a Row..." << std::endl;
+  SMW_INFO << tr("changing layout to Widget3 and 4 in a Row...").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -1267,7 +1267,7 @@ void QmitkStdMultiWidget::changeLayoutToSmallUpperWidget2Big3and4()
 
 void QmitkStdMultiWidget::changeLayoutTo2x2Dand3DWidget()
 {
-  SMW_INFO << "changing layout to 2 x 2D and 3D Widget" << std::endl;
+  SMW_INFO << tr("changing layout to 2 x 2D and 3D Widget").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -1348,7 +1348,7 @@ void QmitkStdMultiWidget::changeLayoutTo2x2Dand3DWidget()
 
 void QmitkStdMultiWidget::changeLayoutToLeft2Dand3DRight2D()
 {
-  SMW_INFO << "changing layout to 2D and 3D left, 2D right Widget" << std::endl;
+  SMW_INFO << tr("changing layout to 2D and 3D left, 2D right Widget").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -1429,7 +1429,7 @@ void QmitkStdMultiWidget::changeLayoutToLeft2Dand3DRight2D()
 
 void QmitkStdMultiWidget::changeLayoutTo2DUpAnd3DDown()
 {
-  SMW_INFO << "changing layout to 2D up and 3D down" << std::endl;
+  SMW_INFO << tr("changing layout to 2D up and 3D down").toStdString() << std::endl;
 
   //Hide all Menu Widgets
   this->HideAllWidgetToolbars();
@@ -1833,8 +1833,8 @@ void QmitkStdMultiWidget::HandleCrosshairPositionEventDelayed()
   {
     image->GetGeometry()->WorldToIndex(crosshairPos, p);
     stream.precision(2);
-    stream<<"Position: <" << std::fixed <<crosshairPos[0] << ", " << std::fixed << crosshairPos[1] << ", " << std::fixed << crosshairPos[2] << "> mm";
-    stream<<"; Index: <"<<p[0] << ", " << p[1] << ", " << p[2] << "> ";
+    stream<<tr("Position: <").toStdString() << std::fixed <<crosshairPos[0] << ", " << std::fixed << crosshairPos[1] << ", " << std::fixed << crosshairPos[2] << "> ";
+    stream<<tr("; Index: <").toStdString() <<p[0] << ", " << p[1] << ", " << p[2] << "> ";
 
     mitk::ScalarType pixelValue;
 
@@ -1849,16 +1849,16 @@ void QmitkStdMultiWidget::HandleCrosshairPositionEventDelayed()
 
     if (fabs(pixelValue)>1000000 || fabs(pixelValue) < 0.01)
     {
-      stream<<"; Time: " << baseRenderer->GetTime() << " ms; Pixelvalue: "<< std::scientific<< pixelValue <<"  ";
+      stream<<tr("; Time: ").toStdString() << baseRenderer->GetTime() << tr(" ms; Pixelvalue: ").toStdString() << std::scientific<< pixelValue <<"  ";
     }
     else
     {
-      stream<<"; Time: " << baseRenderer->GetTime() << " ms; Pixelvalue: "<< pixelValue <<"  ";
+      stream<<tr("; Time: ").toStdString() << baseRenderer->GetTime() << tr(" ms; Pixelvalue: ").toStdString() << pixelValue <<"  ";
     }
   }
   else
   {
-    stream << "No image information at this position!";
+    stream << tr("No image information at this position!").toStdString();
   }
 
   statusText = stream.str();
@@ -1993,7 +1993,7 @@ void QmitkStdMultiWidget::SetGradientBackgroundColorForRenderWindow( const mitk:
 
   if(widgetNumber > 3)
   {
-    MITK_ERROR << "Gradientbackground for unknown widget!";
+    MITK_ERROR << tr("Gradientbackground for unknown widget!").toStdString();
     return;
   }
   m_GradientBackgroundColors[widgetNumber].first = upper;
@@ -2180,7 +2180,7 @@ void QmitkStdMultiWidget::SetDecorationColor(unsigned int widgetNumber, mitk::Co
     m_DecorationColorWidget4 = color;
     break;
   default:
-    MITK_ERROR << "Decoration color for unknown widget!";
+    MITK_ERROR << tr("Decoration color for unknown widget!").toStdString();
     break;
   }
 }

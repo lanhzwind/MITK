@@ -85,11 +85,11 @@ QVariant QmitkDataStorageTableModel::headerData(int section, Qt::Orientation ori
     {
       // first column: "Name"
       if(section == 0)
-        headerData = "Name";
+        headerData = tr("Name");
       else if(section == 1)
-        headerData = "Data Type";
+        headerData = tr("Data Type");
       else if(section == 2)
-        headerData = "Visibility";
+        headerData = tr("Visibility");
     }
     else if( orientation == Qt::Vertical )
     {

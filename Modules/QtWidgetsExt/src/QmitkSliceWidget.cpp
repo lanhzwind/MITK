@@ -34,9 +34,9 @@ QmitkSliceWidget::QmitkSliceWidget(QWidget* parent, const char* name,
     this->setObjectName(name);
 
   popUp = new QMenu(this);
-  popUp->addAction("Axial");
-  popUp->addAction("Frontal");
-  popUp->addAction("Sagittal");
+  popUp->addAction(tr("Axial"));
+  popUp->addAction(tr("Frontal"));
+  popUp->addAction(tr("Sagittal"));
 
   QObject::connect(popUp, SIGNAL(triggered(QAction*)), this, SLOT(ChangeView(QAction*)) );
   setPopUpEnabled(false);
@@ -120,7 +120,7 @@ void QmitkSliceWidget::SetData(mitk::DataNode::Pointer node,
 
   if (image.IsNull())
   {
-    MITK_WARN << "QmitkSliceWidget data is not an image!";
+    MITK_WARN << tr("QmitkSliceWidget data is not an image!").toStdString();
     return;
   }
 
@@ -222,15 +222,15 @@ void QmitkSliceWidget::wheelEvent(QWheelEvent * e)
 
 void QmitkSliceWidget::ChangeView(QAction* val)
 {
-  if (val->text() == "Axial")
+  if (val->text() == tr("Axial"))
   {
     InitWidget(mitk::SliceNavigationController::Axial);
   }
-  else if (val->text() == "Frontal")
+  else if (val->text() == tr("Frontal"))
   {
     InitWidget(mitk::SliceNavigationController::Frontal);
   }
-  else if (val->text() == "Sagittal")
+  else if (val->text() == tr("Sagittal"))
   {
     InitWidget(mitk::SliceNavigationController::Sagittal);
   }

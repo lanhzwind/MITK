@@ -120,7 +120,7 @@ QString QmitkIOUtil::GetFileOpenFilterString()
     filter = filter.replace(filter.size()-1, 1, ')');
     filters += ";;" + filter;
   }
-  filters.prepend("All (*)");
+  filters.prepend(tr("All (*)"));
   return filters;
 }
 
@@ -136,7 +136,7 @@ QList<mitk::BaseData::Pointer> QmitkIOUtil::Load(const QStringList& paths, QWidg
   std::string errMsg = Load(loadInfos, NULL, NULL, &optionsCallback);
   if (!errMsg.empty())
   {
-    QMessageBox::warning(parent, "Error reading files", QString::fromStdString(errMsg));
+    QMessageBox::warning(parent, tr("Error reading files"), QString::fromStdString(errMsg));
     mitkThrow() << errMsg;
   }
 
@@ -165,7 +165,7 @@ mitk::DataStorage::SetOfObjects::Pointer QmitkIOUtil::Load(const QStringList& pa
   std::string errMsg = Load(loadInfos, nodeResult, &storage, &optionsCallback);
   if (!errMsg.empty())
   {
-    QMessageBox::warning(parent, "Error reading files", QString::fromStdString(errMsg));
+    QMessageBox::warning(parent, tr("Error reading files"), QString::fromStdString(errMsg));
     mitkThrow() << errMsg;
   }
   return nodeResult;
@@ -218,8 +218,8 @@ QStringList QmitkIOUtil::Save(const std::vector<const mitk::BaseData*>& data,
     if (filters.Size() < 2)
     {
       QMessageBox::warning(parent,
-                           "Saving not possible",
-                           QString("No writer available for type \"%1\"").arg(
+                           tr("Saving not possible"),
+                           tr("No writer available for type \"%1\"").arg(
                              QString::fromStdString((*dataIter)->GetNameOfClass())));
       continue;
     }
@@ -228,7 +228,7 @@ QStringList QmitkIOUtil::Save(const std::vector<const mitk::BaseData*>& data,
     QString filterString = filters.ToString();
     QString selectedFilter = filters.GetDefaultFilter();
     QString fileName = currentPath;
-    QString dialogTitle = "Save " + QString::fromStdString((*dataIter)->GetNameOfClass());
+    QString dialogTitle = tr("Save ") + QString::fromStdString((*dataIter)->GetNameOfClass());
     if (counter < defaultBaseNames.size())
     {
       dialogTitle += " \"" + defaultBaseNames[counter] + "\"";
@@ -269,7 +269,7 @@ QStringList QmitkIOUtil::Save(const std::vector<const mitk::BaseData*>& data,
 
     if (fileInfo.exists() && !fileInfo.isFile())
     {
-      QMessageBox::warning(parent, "Saving not possible", QString("The path \"%1\" is not a file").arg(fileName));
+      QMessageBox::warning(parent, tr("Saving not possible"), tr("The path \"%1\" is not a file").arg(fileName));
       continue;
     }
 
@@ -325,11 +325,11 @@ QStringList QmitkIOUtil::Save(const std::vector<const mitk::BaseData*>& data,
           {
             if (!fileInfo.isFile())
             {
-              QMessageBox::warning(parent, "Saving not possible", QString("The path \"%1\" is not a file").arg(fileName));
+              QMessageBox::warning(parent, tr("Saving not possible"), tr("The path \"%1\" is not a file").arg(fileName));
               continue;
             }
-            if (QMessageBox::question(parent, "Replace File",
-                                      QString("A file named \"%1\" already exists. Do you want to replace it?").arg(fileName)) ==
+            if (QMessageBox::question(parent, tr("Replace File"),
+                                      tr("A file named \"%1\" already exists. Do you want to replace it?").arg(fileName)) ==
                 QMessageBox::No)
             {
               continue;
@@ -343,15 +343,15 @@ QStringList QmitkIOUtil::Save(const std::vector<const mitk::BaseData*>& data,
     {
       // The extension/filename is not valid (no mime-type found), bail out
       QMessageBox::warning(parent,
-                           "Saving not possible",
-                           QString("No mime-type available which can handle \"%1\".")
+                           tr("Saving not possible"),
+                           tr("No mime-type available which can handle \"%1\".")
                            .arg(fileName));
       continue;
     }
 
     if (!QFileInfo(fileInfo.absolutePath()).isWritable())
     {
-      QMessageBox::warning(parent, "Saving not possible", QString("The path \"%1\" is not writable").arg(fileName));
+      QMessageBox::warning(parent, tr("Saving not possible"), tr("The path \"%1\" is not writable").arg(fileName));
       continue;
     }
 
@@ -369,7 +369,7 @@ QStringList QmitkIOUtil::Save(const std::vector<const mitk::BaseData*>& data,
     std::string errMsg = Save(saveInfos, &optionsCallback);
     if (!errMsg.empty())
     {
-      QMessageBox::warning(parent, "Error writing files", QString::fromStdString(errMsg));
+      QMessageBox::warning(parent, tr("Error writing files"), QString::fromStdString(errMsg));
       mitkThrow() << errMsg;
     }
   }
@@ -404,7 +404,7 @@ struct QmitkIOUtil::SaveFilter::Impl
   {
     // Add an artifical filter for "All"
     m_MimeTypes.push_back(ALL_MIMETYPE());
-    m_FilterStrings.push_back("All (*.*)");
+    m_FilterStrings.push_back(tr("All (*.*)"));
 
     // Get all writers and their mime types for the given base data type
     // (this is sorted already)

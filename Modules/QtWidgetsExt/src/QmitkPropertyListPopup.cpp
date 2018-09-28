@@ -80,7 +80,7 @@ void QmitkPropertyListPopup::fillPopup()
 
       QFont normalFont;
       normalFont.setBold(true);
-      m_ColorMenuAction = new QAction(this->createColorIcon(currentColor), QString("Color..."), this);
+      m_ColorMenuAction = new QAction(this->createColorIcon(currentColor), tr("Color..."), this);
       m_ColorMenuAction->setFont(normalFont);
       m_PopupMenu->addAction(m_ColorMenuAction);
       m_ColorMenuAction->setEnabled(true);
@@ -88,14 +88,14 @@ void QmitkPropertyListPopup::fillPopup()
     }
     else
     {
-      m_ColorMenuAction = new QAction(QString("Color..."), this);
+      m_ColorMenuAction = new QAction(tr("Color..."), this);
       m_PopupMenu->addAction(m_ColorMenuAction);
       m_ColorMenuAction->setEnabled(true);
     }
 
     if ( !AddMaterialPopup() )
     {
-      m_MaterialMenuAction = new QAction(QString("Material"), this);
+      m_MaterialMenuAction = new QAction(tr("Material"), this);
       m_PopupMenu->addAction(m_MaterialMenuAction);
       m_MaterialMenuAction->setEnabled(false);
     }
@@ -105,7 +105,7 @@ void QmitkPropertyListPopup::fillPopup()
     if ( mitk::FloatProperty* opacityProperty = dynamic_cast<mitk::FloatProperty*>( m_PropertyList->GetProperty("opacity")))
     {
       m_OriginalOpacity = mitk::FloatProperty::New( opacityProperty->GetValue() );
-      QMenu* opacityPopup = m_PopupMenu->addMenu("Opacity");
+      QMenu* opacityPopup = m_PopupMenu->addMenu(tr("Opacity"));
 
       QmitkNumberPropertySlider* npe = new QmitkNumberPropertySlider( opacityProperty, opacityPopup );
       npe->setShowPercent(true);
@@ -120,12 +120,12 @@ void QmitkPropertyListPopup::fillPopup()
     }
     else
     {
-      m_OpacityMenuAction = new QAction(QString("Opacity"), this);
+      m_OpacityMenuAction = new QAction(tr("Opacity"), this);
       m_PopupMenu->addAction(m_OpacityMenuAction);
       m_OpacityMenuAction->setEnabled(true);
     }
 
-    m_NameMenuAction = new QAction(QString("Name..."), this);
+    m_NameMenuAction = new QAction(tr("Name..."), this);
     m_PopupMenu->addAction(m_NameMenuAction);
     mitk::StringProperty* nameProperty = dynamic_cast<mitk::StringProperty*>( m_PropertyList->GetProperty("name"));
     m_NameMenuAction->setEnabled(nameProperty != NULL);
@@ -134,7 +134,7 @@ void QmitkPropertyListPopup::fillPopup()
       connect( m_NameMenuAction, SIGNAL(triggered()), this, SLOT(onNameClicked()) );
     }
 
-    m_VisibleMenuAction = new QAction(QString("Visibility"), this);
+    m_VisibleMenuAction = new QAction(tr("Visibility"), this);
     m_VisibleMenuAction->setCheckable(true);
     m_PopupMenu->addAction(m_VisibleMenuAction);
     mitk::BoolProperty* visibleProperty = dynamic_cast<mitk::BoolProperty*>( m_PropertyList->GetProperty("visible"));
@@ -149,7 +149,7 @@ void QmitkPropertyListPopup::fillPopup()
     const mitk::PropertyList::PropertyMap* map = m_PropertyList->GetMap();
     if (map)
     {
-      m_InfoPopup = m_PopupMenu->addMenu("Information");
+      m_InfoPopup = m_PopupMenu->addMenu(tr("Information"));
 
       m_PopupMenu->addSeparator();
 
@@ -220,7 +220,7 @@ bool QmitkPropertyListPopup::AddMaterialPopup()
     materialPopup->addAction(materialEditorMenuItem);
     connect( m_MaterialEditor, SIGNAL(ChangesAccepted(QmitkMaterialEditor*)), this, SLOT(MaterialEditorChangesAccepted(QmitkMaterialEditor*)) );
 
-    m_MaterialMenuAction = new QAction(QString("Material"), materialPopup);
+    m_MaterialMenuAction = new QAction(tr("Material"), materialPopup);
     materialPopup->addAction(m_OpacityMenuAction);
     m_OpacityMenuAction->setEnabled(true);
 

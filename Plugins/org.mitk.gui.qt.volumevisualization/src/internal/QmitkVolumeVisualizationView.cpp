@@ -83,13 +83,13 @@ void QmitkVolumeVisualizationView::CreateQtPartControl(QWidget* parent)
       m_Controls->m_TransferFunctionGeneratorWidget->AddPreset(QString::fromStdString(*it));
     }
 
-    m_Controls->m_RenderMode->addItem("CPU raycast");
-    m_Controls->m_RenderMode->addItem("CPU MIP raycast");
-    m_Controls->m_RenderMode->addItem("GPU slicing");
+    m_Controls->m_RenderMode->addItem(tr("CPU raycast"));
+    m_Controls->m_RenderMode->addItem(tr("CPU MIP raycast"));
+    m_Controls->m_RenderMode->addItem(tr("GPU slicing"));
 // Only with VTK 5.6 or above
 #if ((VTK_MAJOR_VERSION > 5) || ((VTK_MAJOR_VERSION==5) && (VTK_MINOR_VERSION>=6) ))
-    m_Controls->m_RenderMode->addItem("GPU raycast");
-    m_Controls->m_RenderMode->addItem("GPU MIP raycast");
+    m_Controls->m_RenderMode->addItem(tr("GPU raycast"));
+    m_Controls->m_RenderMode->addItem(tr("GPU MIP raycast"));
 #endif
 
     connect( m_Controls->m_EnableRenderingCB, SIGNAL( toggled(bool) ),this, SLOT( OnEnableRendering(bool) ));
@@ -165,9 +165,9 @@ void QmitkVolumeVisualizationView::OnSelectionChanged(berry::IWorkbenchPart::Poi
     std::string  infoText;
 
     if (node->GetName().empty())
-      infoText = std::string("Selected Image: [currently selected image has no name]");
+      infoText = tr("Selected Image: [currently selected image has no name]").toStdString();
     else
-      infoText = std::string("Selected Image: ") + node->GetName();
+      infoText = tr("Selected Image: ").toStdString() + node->GetName();
 
     m_Controls->m_SelectedImageLabel->setText( QString( infoText.c_str() ) );
 
@@ -180,7 +180,7 @@ void QmitkVolumeVisualizationView::OnSelectionChanged(berry::IWorkbenchPart::Poi
       m_Controls->m_NoSelectedImageLabel->hide();
       m_Controls->m_ErrorImageLabel->show();
       std::string  infoText;
-      infoText = std::string("only 3D or 4D images are supported");
+      infoText = tr("only 3D or 4D images are supported").toStdString();
       m_Controls->m_ErrorImageLabel->setText( QString( infoText.c_str() ) );
     }
     else

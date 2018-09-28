@@ -67,7 +67,7 @@ void QmitkDataManagerHotkeysPrefPage::CreateQtControl(QWidget* parent)
   for (auto it = m_HotkeyEditors.begin()
     ; it != m_HotkeyEditors.end(); ++it)
   {
-    layout->addWidget(new QLabel(it->first), i,0);
+    layout->addWidget(new QLabel(tr(it->first.toStdString().c_str())), i,0);
     layout->addWidget(it->second, i,1);
     layout->setRowStretch(i,0);
     ++i;
@@ -97,7 +97,7 @@ bool QmitkDataManagerHotkeysPrefPage::PerformOk()
       keyString = it->second->GetKeySequenceAsString();
 
       if(keyString.isEmpty())
-        errString = QString("No valid key sequence for \"%1\"").arg(it->first);
+        errString = tr("No valid key sequence for")+ QString(" \"%1\"").arg(it->first);
 
       if(errString.isEmpty())
       {
@@ -112,12 +112,12 @@ bool QmitkDataManagerHotkeysPrefPage::PerformOk()
            }
         }
         if(duplicate == true)
-          errString = QString("Duplicate hot key for \"%1\" and \"%2\"").arg(it->first).arg(it2->first);
+          errString = tr("Duplicate hot key for") + QString(" \"%1\" ").arg(it->first) + tr("and") + QString(" \"%2\"").arg(it2->first);
       }
 
       if(!errString.isEmpty())
       {
-        QMessageBox::critical(QApplication::activeWindow(), "Error", errString);
+        QMessageBox::critical(QApplication::activeWindow(), tr("Error"), errString);
         return false;
       }
     }

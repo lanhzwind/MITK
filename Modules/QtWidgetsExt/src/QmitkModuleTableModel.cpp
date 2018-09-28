@@ -110,9 +110,9 @@ QVariant QmitkModuleTableModel::data(const QModelIndex& index, int role) const
     QString name = QString::fromStdString(module->GetName());
     QString version = QString::fromStdString(module->GetVersion().ToString());
     QString location = QString::fromStdString(module->GetLocation());
-    QString state = module->IsLoaded() ? "Loaded" : "Unloaded";
+    QString state = module->IsLoaded() ? tr("Loaded") : tr("Unloaded");
 
-    QString tooltip = "Id: %1\nName: %2\nVersion: %3\nLocation: %7\nState: %9";
+    QString tooltip = tr("Id: %1\nName: %2\nVersion: %3\nLocation: %7\nState: %9");
 
     return tooltip.arg(id, name, version, location, state);
   }

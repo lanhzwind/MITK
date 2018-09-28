@@ -66,8 +66,8 @@ void QmitkStringPropertyOnDemandEdit::onToolButtonClicked()
 {
   bool ok(false);
   QString newText = QInputDialog::getText(this,
-                                          "Change text",
-                                          "You can change the displayed text here",
+                                          tr("Change text"),
+                                          tr("You can change the displayed text here"),
                                           QLineEdit::Normal,
                                           m_label->text(),
                                           &ok);
