@@ -52,7 +52,7 @@ void QmitkLevelWindowRangeChangeDialog::inputValidator()
   {
     QMessageBox::critical( this, tr("Change Range"),
     tr("Upper limit has to be greater than lower limit.\n"
-    "Please enter limits again." );
+    "Please enter limits again." ));
   }
   else
     this->accept();

@@ -34,7 +34,7 @@ QmitkLevelWindowWidgetContextMenu::~QmitkLevelWindowWidgetContextMenu()
 
 void QmitkLevelWindowWidgetContextMenu::setPreset(QAction* presetAction)
 {
-  QString item = presetAction->text();
+  QString item = m_TranslationMap[presetAction->text()];
   if (!(presetAction == m_PresetAction))
   {
     double dlevel = m_LevelWindowPreset->getLevel(item.toStdString());
@@ -186,7 +186,8 @@ void QmitkLevelWindowWidgetContextMenu::getContextMenu(QMenu* contextmenu)
     std::map<std::string, double> preset = m_LevelWindowPreset->getLevelPresets();
     for( auto iter = preset.begin(); iter != preset.end(); iter++ ) {
       QString item = ((*iter).first.c_str());
-      m_PresetSubmenu->addAction(item);
+      m_PresetSubmenu->addAction(tr(item.toStdString().c_str()));
+      m_TranslationMap[tr(item.toStdString().c_str())]=item;
     }
     connect(m_PresetSubmenu, SIGNAL(triggered(QAction*)), this, SLOT(setPreset(QAction*)));
     contextMenu->addMenu(m_PresetSubmenu);
@@ -268,7 +269,8 @@ void QmitkLevelWindowWidgetContextMenu::getContextMenu()
     std::map<std::string, double> preset = m_LevelWindowPreset->getLevelPresets();
     for( auto iter = preset.begin(); iter != preset.end(); iter++ ) {
       QString item = ((*iter).first.c_str());
-      m_PresetSubmenu->addAction(item);
+      m_PresetSubmenu->addAction(tr(item.toStdString().c_str()));
+      m_TranslationMap[tr(item.toStdString().c_str())]=item;
     }
     connect(m_PresetSubmenu, SIGNAL(triggered(QAction*)), this, SLOT(setPreset(QAction*)));
     contextMenu->addMenu( m_PresetSubmenu );

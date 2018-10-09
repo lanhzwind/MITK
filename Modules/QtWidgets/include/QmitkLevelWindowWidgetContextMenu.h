@@ -22,6 +22,7 @@ See LICENSE.txt or http://www.mitk.org for details.
 #include <mitkLevelWindowPreset.h>
 #include <mitkLevelWindowManager.h>
 #include <QMenu>
+#include <QMap>
 
 /**
  * \ingroup QmitkModule
@@ -86,6 +87,8 @@ protected:
 
   /// ID of image selected in contextmenu
   QAction* m_ImageAction;
+
+  QMap<QString, QString> m_TranslationMap;
 
 protected slots:
 
