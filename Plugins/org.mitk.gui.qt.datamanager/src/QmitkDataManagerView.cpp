@@ -604,7 +604,7 @@ void QmitkDataManagerView::ColorChanged()
       return;
     color = colorProp->GetValue();
     QColor initial(color.GetRed()*255,color.GetGreen()*255,color.GetBlue()*255);
-    QColor qcolor = QColorDialog::getColor(initial,0,QString(tr("Change color")));
+    QColor qcolor = QColorDialog::getColor(initial,0,QString(tr("Change color")),QColorDialog::DontUseNativeDialog);
     if (!qcolor.isValid())
       return;
     m_ColorButton->setAutoFillBackground(true);
