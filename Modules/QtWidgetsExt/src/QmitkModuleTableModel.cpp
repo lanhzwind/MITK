@@ -126,10 +126,10 @@ QVariant QmitkModuleTableModel::headerData(int section, Qt::Orientation orientat
 
   switch (section)
   {
-  case 0: return "Id";
-  case 1: return "Name";
-  case 2: return "Version";
-  case 3: return "Location";
+  case 0: return tr("Id");
+  case 1: return tr("Name");
+  case 2: return tr("Version");
+  case 3: return tr("Location");
   }
   return QVariant();
 }
