@@ -117,6 +117,9 @@ void QmitkDataManagerView::CreateQtPartControl(QWidget* parent)
       = (prefService->GetSystemPreferences()->Node(VIEW_ID))
         .Cast<berry::IBerryPreferences>();
   assert( prefs );
+  m_Prefs=(prefService->GetSystemPreferences()->Node("/General"))
+        .Cast<berry::IBerryPreferences>();
+
   prefs->OnChanged.AddListener( berry::MessageDelegate1<QmitkDataManagerView
     , const berry::IBerryPreferences*>( this
       , &QmitkDataManagerView::OnPreferencesChanged ) );
@@ -604,7 +607,7 @@ void QmitkDataManagerView::ColorChanged()
       return;
     color = colorProp->GetValue();
     QColor initial(color.GetRed()*255,color.GetGreen()*255,color.GetBlue()*255);
-    QColor qcolor = QColorDialog::getColor(initial,0,QString(tr("Change color")),QColorDialog::DontUseNativeDialog);
+    QColor qcolor = QColorDialog::getColor(initial,0,QString(tr("Change color")),(m_Prefs.IsNotNull()&&m_Prefs->GetBool("use Qt dialogs",false))?QColorDialog::DontUseNativeDialog:0);
     if (!qcolor.isValid())
       return;
     m_ColorButton->setAutoFillBackground(true);
@@ -677,7 +680,7 @@ void QmitkDataManagerView::ColormapActionToggled( bool /*checked*/ )
   if(!senderAction)
     return;
 
-  std::string activatedItem = senderAction->text().toStdString();
+  std::string activatedItem = m_ColorTranslationMap[senderAction->text()];
 
   mitk::LookupTable::Pointer lookupTable = lookupTableProperty->GetValue();
   if (!lookupTable)
@@ -717,9 +720,12 @@ void QmitkDataManagerView::ColormapMenuAboutToShow()
   int i = 0;
   std::string lutType = lookupTable->typenameList[i];
 
+  m_ColorTranslationMap.clear();
+
   while (lutType != "END_OF_ARRAY")
   {
-    tmp = m_ColormapAction->menu()->addAction(QString::fromStdString(lutType));
+    tmp = m_ColormapAction->menu()->addAction(tr(lutType.c_str()));
+    m_ColorTranslationMap[tr(lutType.c_str())]=lutType;
     tmp->setCheckable(true);
 
     if (lutType == lookupTable->GetActiveTypeAsString())
@@ -748,11 +754,14 @@ void QmitkDataManagerView::SurfaceRepresentationMenuAboutToShow()
   m_SurfaceRepresentation->menu()->clear();
   QAction* tmp;
 
+  m_SurfaceRepresentationTranslationMap.clear();
+
   // create menu entries
   for(mitk::EnumerationProperty::EnumConstIterator it=representationProp->Begin(); it!=representationProp->End()
     ; it++)
   {
-    tmp = m_SurfaceRepresentation->menu()->addAction(QString::fromStdString(it->second));
+    tmp = m_SurfaceRepresentation->menu()->addAction(tr(it->second.c_str()));
+    m_SurfaceRepresentationTranslationMap[tr(it->second.c_str())]=it->second;
     tmp->setCheckable(true);
 
     if(it->second == representationProp->GetValueAsString())
@@ -781,7 +790,7 @@ void QmitkDataManagerView::SurfaceRepresentationActionToggled( bool /*checked*/ 
   if(!senderAction)
     return;
 
-  std::string activatedItem = senderAction->text().toStdString();
+  std::string activatedItem = m_SurfaceRepresentationTranslationMap[senderAction->text()];
 
   if ( activatedItem != representationProp->GetValueAsString() )
   {

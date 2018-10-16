@@ -257,6 +257,12 @@ protected:
 
   QmitkDataManagerItemDelegate* m_ItemDelegate;
 
+  QMap<QString, std::string> m_ColorTranslationMap;
+
+  QMap<QString, std::string> m_SurfaceRepresentationTranslationMap;
+
+  berry::IBerryPreferences::Pointer m_Prefs;
+
 private:
 
   QItemSelectionModel* GetDataNodeSelectionModel() const override;

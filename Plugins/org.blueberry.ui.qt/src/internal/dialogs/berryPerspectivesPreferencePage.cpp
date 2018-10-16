@@ -235,10 +235,10 @@ void PerspectivesPreferencePage::UpdatePerspectivesTable()
 
 void PerspectivesPreferencePage::NewPerspectivesTableItem(const SmartPointer<PerspectiveDescriptor>& desc)
 {
-  QString label = desc->GetLabel();
+  QString label = tr(desc->GetLabel().toStdString().c_str());
   if (desc->GetId() == defaultPerspectiveId)
   {
-    label += " (default)";
+    label += tr(" (default)");
   }
   new QListWidgetItem(desc->GetImageDescriptor(), label, ui->perspectivesListWidget);
 }
