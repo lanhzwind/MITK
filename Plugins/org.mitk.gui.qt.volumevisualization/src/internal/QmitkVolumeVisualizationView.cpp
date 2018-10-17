@@ -80,7 +80,7 @@ void QmitkVolumeVisualizationView::CreateQtPartControl(QWidget* parent)
     for (std::vector<std::string>::const_iterator it = names.begin();
          it != names.end(); ++it)
     {
-      m_Controls->m_TransferFunctionGeneratorWidget->AddPreset(QString::fromStdString(*it));
+      m_Controls->m_TransferFunctionGeneratorWidget->AddPreset(tr((*it).c_str()));
     }
 
     m_Controls->m_RenderMode->addItem(tr("CPU raycast"));
