@@ -22,6 +22,7 @@ See LICENSE.txt or http://www.mitk.org for details.
 #include <usModule.h>
 
 #include <QBrush>
+#include <QApplication>
 
 
 class QmitkModuleTableModelPrivate
@@ -110,9 +111,9 @@ QVariant QmitkModuleTableModel::data(const QModelIndex& index, int role) const
     QString name = QString::fromStdString(module->GetName());
     QString version = QString::fromStdString(module->GetVersion().ToString());
     QString location = QString::fromStdString(module->GetLocation());
-    QString state = module->IsLoaded() ? tr("Loaded") : tr("Unloaded");
+    QString state = module->IsLoaded() ? QApplication::translate("QmitkModuleTableModel","Loaded") : QApplication::translate("QmitkModuleTableModel","Unloaded");
 
-    QString tooltip = tr("Id: %1\nName: %2\nVersion: %3\nLocation: %7\nState: %9");
+    QString tooltip = QApplication::translate("QmitkModuleTableModel","Id: %1\nName: %2\nVersion: %3\nLocation: %7\nState: %9");
 
     return tooltip.arg(id, name, version, location, state);
   }
@@ -126,10 +127,10 @@ QVariant QmitkModuleTableModel::headerData(int section, Qt::Orientation orientat
 
   switch (section)
   {
-  case 0: return tr("Id");
-  case 1: return tr("Name");
-  case 2: return tr("Version");
-  case 3: return tr("Location");
+  case 0: return QApplication::translate("QmitkModuleTableModel","Id");
+  case 1: return QApplication::translate("QmitkModuleTableModel","Name");
+  case 2: return QApplication::translate("QmitkModuleTableModel","Version");
+  case 3: return QApplication::translate("QmitkModuleTableModel","Location");
   }
   return QVariant();
 }
