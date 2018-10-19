@@ -52,6 +52,12 @@ void QmitkStatusBar::DisplayText(const char* t, int ms)
 void QmitkStatusBar::DisplayGreyValueText(const char* t)
 {
   QString text(t);
+  text.replace("Position:",QApplication::translate("QmitkStatusBar","Position:"))
+  .replace("mm",QApplication::translate("QmitkStatusBar","mm"))
+  .replace("Index:",QApplication::translate("QmitkStatusBar","Index:"))
+  .replace("Time:",QApplication::translate("QmitkStatusBar","Time:"))
+  .replace("ms",QApplication::translate("QmitkStatusBar","ms"))
+  .replace("Pixelvalue:",QApplication::translate("QmitkStatusBar","Pixelvalue:"));
   m_GreyValueLabel->setText(text);
 }
 /**
