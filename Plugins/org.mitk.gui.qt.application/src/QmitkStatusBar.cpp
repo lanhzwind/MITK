@@ -57,7 +57,8 @@ void QmitkStatusBar::DisplayGreyValueText(const char* t)
   .replace("Index:",QApplication::translate("QmitkStatusBar","Index:"))
   .replace("Time:",QApplication::translate("QmitkStatusBar","Time:"))
   .replace("ms",QApplication::translate("QmitkStatusBar","ms"))
-  .replace("Pixelvalue:",QApplication::translate("QmitkStatusBar","Pixelvalue:"));
+  .replace("Pixelvalue:",QApplication::translate("QmitkStatusBar","Pixelvalue:"))
+  .replace("No image information at this position!",QApplication::translate("QmitkStatusBar","No image information at this position!"));
   m_GreyValueLabel->setText(text);
 }
 /**
