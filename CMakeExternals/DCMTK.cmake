@@ -26,7 +26,7 @@ if(MITK_USE_DCMTK)
       )
     endif()
 
-    if(LINUX)
+    if(UNIX)
       set(DCMTK_PATCH_FILE DCMTK-3.6.1-linux.patch)
     else()
       set(DCMTK_PATCH_FILE DCMTK-3.6.1.patch)
