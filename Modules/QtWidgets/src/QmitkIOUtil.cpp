@@ -113,7 +113,7 @@ QString QmitkIOUtil::GetFileOpenFilterString()
       }
     }
 
-    QString filter = QString::fromStdString(*cat) + " (";
+    QString filter = QApplication::translate("QmitkIOUtil",(*cat).c_str()) + " (";
     foreach(const QString& extension, filterExtensions)
     {
       filter += "*." + extension + " ";
@@ -426,7 +426,7 @@ struct QmitkIOUtil::SaveFilter::Impl
         m_DefaultExtension = QString::fromStdString(extensions.front());
       }
 
-      QString filter = QString::fromStdString(mimeType.GetComment()) + " (";
+      QString filter = QApplication::translate("QmitkIOUtil",mimeType.GetComment().c_str()) + " (";
       foreach(const QString& extension, filterExtensions)
       {
         filter += "*." + extension + " ";
